@@ -3,5 +3,6 @@
 .RData
 .Ruserdata
 .log
-.pdf
-.html
+thesis-proposal.pdf
+slides.html
+/slides_files

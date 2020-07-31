@@ -1,0 +1,93 @@
+---
+title: "Thesis proposal"
+author: "Luis Castillo"
+date: "7/30/2020"
+output: 
+  pdf_document: 
+    citation_package: natbib
+header-includes:
+ - \usepackage{natbib}
+ - \setcitestyle{square,numbers}
+bibliography: references.bib
+# classoption: twocolumn
+---
+
+# 3 Proposal description
+
+## 3.1 Motivation
+Deep Reinforcement Learning (DRL) methods have great potential in real-world application. They have recently shown that it can solve tasks with superior human performance in some scenarios, e.g. classic Atari games \citep{mnih2013playing}, massive online multiplayer games \citep{OpenAI_dota}, or complicated board games \citep{silver2017mastering}.
+
+All these achievements have unleashed increasing popularity in the area and the scientific community is searching for applications in real-world scenarios, where the robotics area is one of the most attractive. It should be noted that DRL methods applied to robotic control are not intended to completely replace traditional control approaches such as reverse kinematics or PID controllers. However, DRL algorithms can be applied in specific scenarios or in combination with traditional methods, especially in very complicated scenarios or dexterous manipulations \citep{akkaya2019solving, openai2018learning, zeng2020tossingbot, gao2020robotic, song2020rapidly}.
+
+In most cases, the dynamic process of robotic control can be approximated as a Markov process, making it an ideal field to experiment with DRL. In addition, recently, large technology companies and prestigious research centers have focused their research in this area, such as OpenAI, who solved the Ribik's cube with a five-finger articulated robotic hand \citep{akkaya2019solving}, using a new technique called automatic domain randomization (ADR) for sim-to-real transfer.
+
+Other approach is training the agent directly on the physical robot. However, due to their sampling inefficiency and safety issues for applying DRL algorithms to real hardware, they make it difficult to learn a policy directly on the robot for complex tasks or dexterous manipulation.
+
+Training in simulation and then transferring learned policy to the real world or using expert human demonstrations are two approaches that satisfy satisfying and computational and safety requirements in robot learning tasks. Furthermore, robot simulators have been widely developed for decades, e.g. CoppeliaSim, MuJoCo, Gazebo and Pybullet.
+
+# 3.2 Background
+
+## 3.2.1 Machine learning
+Machine learning (ML) is about learning from data and making predictions and/or decisions.
+It is generally categorized into supervised, unsupervised and reinforcement learning. In supervised learning we have tagged data, in unsupervised learning we have no tag.
+
+
+
+# 3.2.2 Reinforcement Learning
+Reinforcement Learning (RL) is a subfield of ML that address the problem of the automatic learning problem of optimal decisions over time. The main characters of the RL are the agent and the environment. The environment is the world where the agent lives and with which he interacts. At each interaction step, the agent sees an observation (or partial observation) of the state of the world, and then decides what action to take based on a policy. After this agent interaction the environment changes, but there are also times that the environment changes on its own.
+
+![The agent, environment loop](images/agent_env_loop.png)
+
+The agent also perceives a reward signal from the environment, a scalar that indicates how good or bad the current state of the world is. The agent's goal is to maximize the accumulated reward, this is called return. Reinforcement learning methods are the ways in which the agent can learn behaviors (policies) to achieve this objective.
+
+# 3.2.3 RL formalism
+A Markov Decision Process (MDP) is a 5-tuple, $(S, A, R, P, \rho_0)$, where
+
+* $S$ is the set of all valid states,
+* $A$ is the set of all valid actions,
+* $R \,:\, S \times A \times S \to \mathbb{R}$ is the reward function, with $r_t = R(s_t, a_t, s_{t+1})$,
+* $P \,:\, S \times A \to \mathcal{P}(S)$ is the transition probability function, with $P(s’|s,a)$ being the probability of transition into state $s’$ if you start in the state $s$ and take action $a$,
+* and $\rho_0$ is the state distribution.
+
+The name Markov Decision Process refers to the fact that the system obeys the Markov property; transitions only depend on the most recent state and action, and no prior history.
+
+# 3.3 Problem statement
+
+Humans can solve many activities that are presented to us in our daily life without much effort, e.g. move and throw objects, open doors or write. However, although these tasks may seem simple, they actually require a certain degree of dexterous, which we humans learn through experience. Trying to solve these activities with a robot following traditional robot control approaches represents a big challenge, because it is necessary to solve complex dynamic models and consider many uncertainties in the process.
+
+However, the latest advances in DRL applied to robotic control have shown that it is possible to teach robots to solve this kind of tasks similarly to how a baby learn to walk; by trial and error. This learning can be obtained directly on the physical robot, but this involves a couple of problems; The first is that data sampling is very inefficient and it would take hundreds of hours to solve a task, in addition to the need to design an automatic system to restart the physical test environment or directly depend on human operators. And the second is that some DRL methods employ scanning mechanisms that could result in dangerous actions for the robot and the surrounding environment.
+
+A very attractive alternative is gather all the data necessary for the training purely in simulation, and then deploy the learned control policy in a physical robot, i.e. sim-to-real. However, simulation environments do not represent the full complexity of the real world, and the policies learned in these virtual environments only perform well under conditions similar to those seen during the training phase. This disparity between virtual simulation environments and the real world is known as the *"reality gap"*.
+
+However, the latest advances in the field of DRL applied to robot control have shown that it is possible to overcome this barrier  \citep{akkaya2019solving, tobin2017domain, peng2018sim, tan2018sim} using techniques that randomly modify the dynamics of the simulator during the training phase in order to expose the agent to a wide range of variations in the environment, this forces the agent to learn to adapt to the constant changes in the environment.
+
+# 3.4 Hypothesis
+
+> If we randomly modify the dynamics of a simulation environment in order to learn a robust control policy for solving a dexterous manipulation task, then it is possible to transfer this learned policy to a physical robot and solve the task without any fine-tuning.
+
+# 3.5 Research objectives
+
+## 3.5.1 General objective
+
+The general objective of this thesis project is:
+
+> Train an agent purely in simulation to solve a specific dexterous manipulation task using reinforcement learning algorithms and domain randomization techniques and then transfer the learned policy to a physical robot
+
+## 3.5.2 Specific objectives
+
+The following objectives emerge from the main objective of this research:
+
+1. Select a state-of-the-art simulator that meets the requirements of the selected task and reinforcement learning algorithms.
+2. Document me in the use of the selected robotics simulator and generate the virtual test environment for the selected task.
+3. Review of the state-of-the-art in reinforcement learning algorithms for robot control.
+4. Implement one or more of the state-of-the-art RL algorithms for robot control to solve the selected task in the simulation environment (without domain randomization).
+5. Review of the state-of-the-art of domain randomization techniques.
+6. Implement state-of-the-art techniques in domain randomization and retrain the agent to solve the selected task.
+7. Transfer the policies learned in simulation (with and without domain randomization) to the physical robot and make a comparison of performance in the selected task.
+8. Communicate the results.
+
+# 3.6 Scientific contribution
+
+The main contribution of this work is to solve a dexterous manipulation task^[Such as trhowing objects (like a balls) out of the robot's range] with a redundant serial robot by training an agent purely in simulation.
+
+# References
