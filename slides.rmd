@@ -116,7 +116,7 @@ However, simulation environments do not represent the full complexity of the rea
 
 
 ##
-But, in the latest advances in Deep RL applied to robot control have shown ([Peng et al. 2018sim](#ref2), [Akkaya et al. 2019](#ref1)) that it is possible to overcome this barrier using techniques that randomly modify the dynamics of the simulator during the training phase in order to expose the agent to a wide range of variations in the environment, this forces the agent to **learn to adapt** to the constant changes in the environment.
+But, in the latest advances in Deep RL applied to robot control have shown [(Peng et al. 2018sim, Akkaya et al. 2019)](#ref) that it is possible to overcome this barrier using techniques that randomly modify the dynamics of the simulator during the training phase in order to expose the agent to a wide range of variations in the environment, this forces the agent to **learn to adapt** to the constant changes in the environment.
 
 ![](images/dr_crop.png){width=80%}
 
@@ -201,7 +201,7 @@ fig
 
 # References {#references}
 
-## {#ref1}
+##
 
 1. Ilge Akkaya, Marcin Andrychowicz, Maciek Chociej, Mateusz Litwin, Bob McGrew, Arthur Petron, Alex
 Paino, Matthias Plappert, Glenn Powell, Raphael Ribas, et al. Solving rubik’s cube with a robot hand.
@@ -215,7 +215,7 @@ Tobin, Peter Welinder, Lilian Weng, and Wojciech Zaremba. Learning dexterous in-
 Vikas Sindhwani, and Navdeep Jaitly. Robotic table tennis with model-free reinforcement learning.
 arXiv preprint arXiv:2003.14398, 2020.
 
-## {#ref2}
+##
 
 4. Volodymyr Mnih, Koray Kavukcuoglu, David Silver, Alex Graves, Ioannis Antonoglou, Daan Wierstra,
 and Martin Riedmiller. Playing atari with deep reinforcement learning. arXiv preprint arXiv:1312.5602, 2013.
@@ -230,7 +230,7 @@ automation (ICRA), pages 1–8. IEEE, 2018.
 Marc Lanctot, Laurent Sifre, Dharshan Kumaran, Thore Graepel, et al. Mastering chess and shogi by
 self-play with a general reinforcement learning algorithm. arXiv preprint arXiv:1712.01815, 2017.
 
-## {#ref3}
+##
 
 8. Xingyou Song, Yuxiang Yang, Krzysztof Choromanski, Ken Caluwaerts, Wenbo Gao, Chelsea Finn, and
 Jie Tan. Rapidly adaptable legged robots via evolutionary meta-learning. arXiv preprint arXiv:2003.01239, 2020.
