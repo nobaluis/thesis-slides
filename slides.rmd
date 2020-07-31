@@ -95,7 +95,7 @@ Trying to solve *these activities* with a robot following traditional robot cont
 ##
 However, the latest advances in RL applied to robotic control have shown that it is possible to teach robots to solve this kind of tasks similarly to how a baby learn to walk; by trial and error.
 
-![](images/Deep RL_diagram.png)
+![](images/drl_diagram.png)
 
 ##
 This learning can be obtained directly on the physical robot, but this involves a couple of problems:
