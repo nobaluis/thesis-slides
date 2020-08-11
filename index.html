@@ -458,7 +458,7 @@ document.getElementsByTagName('head')[0].appendChild(style);
 
 <section>
     <h1 class="title">Learning Dexterous Manipulation with Model-Free Deep Reinforcement Learning</h1>
-    <h2 class="author"><div class="line-block"><small>Thesis Advisor: Ph.D. Reyes Ríos Cabreara</small><br />
+    <h2 class="author"><div class="line-block"><small>Thesis Director: Ph.D. Reyes Ríos Cabrera</small><br />
 <small>Author: Luis Castillo</small></div></h2>
 </section>
 
@@ -476,20 +476,21 @@ document.getElementsByTagName('head')[0].appendChild(style);
 <li><a href="#/objectives">Objectives</a></li>
 <li><a href="#/scientific-contribution">Scientific Contribution</a></li>
 </ul></li>
+<li><a href="#/progress">Current Progress</a></li>
 <li><a href="#/activities">Chronogram of activities</a></li>
 <li><a href="#/references">References</a></li>
 </ul>
 </section>
 <section><section id="introduction" class="title-slide slide level1"><h1>Introduction</h1></section><section id="section" class="slide level2">
 <h2></h2>
-<p><strong>Deep Reinforcement Learning</strong> (Deep RL) methods have great potential in real-world application. They have recently shown that it can solve tasks with superior human performance in some scenarios, e.g. classic Atari games <a href="#/ref">(Mnih et al. 2013)</a>, massive online multiplayer games <a href="#/ref">(OpenAI 2018)</a>, or complicated board games <a href="#/ref">(Silver et al. 2017)</a>.</p>
+<p><strong>Deep Reinforcement Learning</strong> have great potential in real-world applications. Recent advances have shown that these methods can solve tasks with superior performance than humans in some scenarios, e.g. classic Atari games <span class="citation" data-cites="mnih2013playing">Mnih et al. (2013)</span>, complicated board games <span class="citation" data-cites="silver2016mastering silver2017mastering">(Silver et al. 2016, 2017)</span> or massive online multiplayer games <span class="citation" data-cites="OpenAI_dota">OpenAI (2018)</span>.</p>
 <video data-autoplay src="videos/alphazero_2017_final.m4v" loop="loop" width="460" height="258">
 </video>
 <video data-autoplay src="videos/openai_five_dota_final.m4v" loop="loop" width="460" height="258">
 </video>
 </section><section id="section-1" class="slide level2">
 <h2></h2>
-<p>Deep RL algorithms can be used to learn to control physical robots in real-time <a href="#/ref">(Gao et al. 2020)</a>. Deep RL agents learn to solve a given task by interacting with an unknown, unstructured environment. Due to its simple and intuitive fundamentals and its great potential to solve complex problems, Deep RL has become one of the most appealing branches of artificial intelligence.</p>
+<p>DRL is not just for games. Due to the simplicity of the RL framework. The same algorithms for solving games can be used to control physical robots in real-time <span class="citation" data-cites="gao2020robotic">Gao et al. (2020)</span>. However, DRL methods <strong>are not intended to completely replace </strong> traditional control approaches. But, these methods can be applied in <strong>specific scenarios</strong> or in combination with traditional methods.</p>
 <video data-autoplay src="videos/dxl-tracker-trpo.m4v" loop="loop" width="280" height="157">
 </video>
 <video data-autoplay src="videos/create-docker-trpo.m4v" loop="loop" width="280" height="157">
@@ -497,41 +498,67 @@ document.getElementsByTagName('head')[0].appendChild(style);
 <video data-autoplay src="videos/ur-reacher-6-trpo.m4v" loop="loop" width="280" height="157">
 </video>
 </section></section>
-<section><section id="state-of-the-art" class="title-slide slide level1"><h1>State of the art</h1></section><section id="section-2" class="slide level2">
-<h2></h2>
-<ul>
-<li><p><a href="#/ref">(Peng et al. 2018)</a> propose to use dynamics randomization to train recurrent policies in simulation, and deploy the learned policies directly on a physical robot, achieving good performance on an object pushing task, without calibration.</p></li>
-<li><p><a href="#/ref">(OpenAI et al. 2018)</a> proposes to learn dexterous manipulation with a five finger articulated hand, using Proximal Policy Optimization (PPO), with dynamic randomization (DR) in the simulation, achieving very good results in the physical system.</p></li>
-<li><p><a href="#/ref1">(Akkaya et al. 2019)</a> proposes a new algorithm to modify the dynamics of the simulator automatically called Automatic Domain Randomization (ADR), substantially improving the results obtained with DR. This is demonstrated by solving the Rubik’s cube with a robotic hand.</p></li>
-</ul>
-<!-- TODO: add the tossing bot paper -->
+<section><section id="state-of-the-art" class="title-slide slide level1"><h1>State of the art</h1></section><section id="rl-algorithms" class="slide level2">
+<h2>RL algorithms</h2>
+<p><img src="images/rl_algorithms.svg" style="display: block; margin: auto;" /></p>
+</section><section id="sim-to-real-14" class="slide level2">
+<h2>Sim-To-Real (1/4)</h2>
+<p><span class="citation" data-cites="peng2018sim">Peng et al. (2018)</span> propose to use dynamics randomization (DR) to train in simulation, and deploy the learned policies directly on a physical robot to solve pushing object task, achieving good performance.</p>
+<center>
+<video data-autoplay src="videos/peng2018.m4v" loop="loop" width="720" height="405">
+</video>
+</center>
+</section><section id="sim-to-real-24" class="slide level2">
+<h2>Sim-To-Real (2/4)</h2>
+<p><span class="citation" data-cites="openai2018learning">OpenAI et al. (2018)</span> propose to learn dexterity of in-hand manipulation to perform object reorientation for a five-finger robotic hand, using PPO with DR in simulation. They use the same code for playing Dota 2 <span class="citation" data-cites="OpenAI_dota">OpenAI (2018)</span>.</p>
+<center>
+<video data-autoplay src="videos/shadow_hand_real_block_final.m4v" loop="loop" width="720" height="405">
+</video>
+</center>
+</section><section id="sim-to-real-34" class="slide level2">
+<h2>Sim-To-Real (3/4)</h2>
+<p><span class="citation" data-cites="tan2018sim">Tan et al. (2018)</span> propose to learn locomotion for quadruped robots. They learn control policies in simulation and deployed on a quadruped robot. They perform system identification for tuning the simulation parameters to improve the fidelity of the physics simulator.</p>
+<center>
+<video data-autoplay src="videos/tan2018.m4v" loop="loop" width="520" height="292">
+</video>
+</center>
+</section><section id="sim-to-real-44" class="slide level2">
+<h2>Sim-To-Real (4/4)</h2>
+<p><span class="citation" data-cites="zeng2020tossingbot">Zeng et al. (2020)</span> propose an end-to-end AI system for picking and throwing objects. Achieving 85% of accuracy, more than double that achieved with analytical solutions (40%). They train the policy in simulation and then use an automatic system for fine-tuning on physical robot.</p>
+<center>
+<video data-autoplay src="videos/tossingbot.m4v" loop="loop" width="520" height="292">
+</video>
+</center>
 </section></section>
 <section><section id="proposal-description" class="title-slide slide level1"><h1>Proposal description</h1></section><section id="motivation" class="slide level2">
 <h2>Motivation</h2>
-<p>In most cases, the dynamic process of <strong>robotic control</strong> can be approximated as a <strong>Markov Decision Process</strong> (MDP) making it an ideal field to experiment with Deep RL algorithms.</p>
+<p>In most cases, the dynamic process of <strong>robotic control</strong> can be approximated as an <strong>MDP</strong> making it an ideal field to experiment with DRL algorithms.</p>
 <p>In addition, recently, large technology companies and prestigious research centers have focused their research in this area, such as OpenAI, who solved the Rubik’s cube with a five-finger articulated robotic hand completely in simulation.</p>
 <video data-autoplay src="videos/shadow_rubik_normal.m4v" loop="loop" width="460" height="258">
 </video>
 <video data-autoplay src="videos/shadow_rubik_oclution.m4v" loop="loop" width="460" height="258">
 </video>
-</section><section id="section-3" class="slide level2">
-<h2></h2>
-<p>Training in simulation and then transferring learned policy to physical systems (i.e <strong>sim-to-real</strong>) or using expert human demonstrations are two approaches that satisfy computational and safety requirements in robot learning tasks. Furthermore, robot simulators have been widely developed for decades, e.g. CoppeliaSim, MuJoCo, Gazebo and Pybullet.</p>
+</section><section id="training-in-a-physical-world" class="slide level2">
+<h2>Training in a physical world</h2>
+<p>We can use DRL algorithms to train robust control policies directly in the physical robot. But this approach has some disadvantages:</p>
+<ul>
+<li><p><strong>Sampling inefficient</strong>: The training may take thousands of hours to solve a single task.</p></li>
+<li><p><strong>Safety issues</strong>: DRL methods use exploration techniques that can be result in dangerous actions.</p></li>
+</ul>
+</section><section id="training-in-simulation" class="slide level2">
+<h2>Training in simulation</h2>
+<p>Training in simulation and then transferring learned policy to physical systems (i.e, <strong>sim-to-real</strong>) or using expert human demonstrations are two approaches that satisfy computational and safety requirements in robot learning tasks.</p>
 <video data-autoplay src="videos/shadow_hand_block.mp4" loop="loop" width="292" height="292">
 </video>
 <video data-autoplay src="videos/shadow_hand_real_block_final.m4v" loop="loop" width="520" height="292">
 </video>
 </section><section id="background" class="slide level2">
-<h2>Background</h2>
-<p>Machine learning (ML) is the field of AI that studies the process of learning from data to make predictions and/or decisions. It is generally categorized into supervised, unsupervised and reinforcement learning.</p>
-<p><img data-src="images/mrl_classification.png" alt="Machine Learning classification" style="width:50.0%" /></p>
-</section><section id="reinforcement-learning" class="slide level2">
-<h2>Reinforcement learning</h2>
+<h2>Background: RL</h2>
 <p>Reinforcement Learning (RL) is a subfield of ML that address the problem of automatic learning for optimal decisions over time. The main characters of the RL are the agent and the environment. The environment is the world where the agent lives and with which he interacts.</p>
-<p><img data-src="images/agent_env_loop2.png" alt="The agent, environment loop" style="width:60.0%" /></p>
+<p><img src="images/agent_env_loop3.png" width="70%" style="display: block; margin: auto;" /></p>
 </section><section id="deep-reinforcement-learning" class="slide level2">
 <h2>Deep Reinforcement Learning</h2>
-<p>DRL is to combine the advantages of DL and RL for building AI systems. The main reason to use DL in RL is to leverage the scalability of DNN in high-dimensional space, e.g. the value function approximation utilizes the data representation of DNN to represent the highly compositional data distribution through end-to-end gradient-based optimization.</p>
+<p>DRL combine the advantages of DL and RL for building AI systems. The main reason to use DL in RL is to leverage the scalability of DNN in high-dimensional space. <span class="citation" data-cites="mnih2013playing">Mnih et al. (2013)</span> prove this by training a DNN from raw pixels to play classic arcade games.</p>
 <center>
 <video data-autoplay src="videos/rl_atari_final.m4v" loop="loop" width="520" height="292">
 </video>
@@ -539,96 +566,204 @@ document.getElementsByTagName('head')[0].appendChild(style);
 </section><section id="problem-statement" class="slide level2">
 <h2>Problem Statement</h2>
 <p>Humans can solve many activities that are presented to us in our daily life without much effort, e.g. move and throw objects, open doors or write. However, although these tasks may seem simple, they require a certain degree of dexterous, which we humans learn through experience.</p>
-<p><img data-src="images/dexterous_manipulation.png" style="width:80.0%" /></p>
-</section><section id="section-4" class="slide level2">
-<h2></h2>
+<p><img src="images/dexterous_manipulation.png" style="display: block; margin: auto;" /></p>
+</section><section id="current-approach" class="slide level2">
+<h2>Current approach</h2>
 <p>Trying to solve <em>these activities</em> with a robot following traditional robot control approaches represents a big challenge, because it is necessary to solve complex dynamic models and consider many uncertainties in the process.</p>
-<p><img data-src="images/model_based_task.png" /></p>
-</section><section id="section-5" class="slide level2">
-<h2></h2>
-<p>However, the latest advances in RL applied to robotic control have shown that it is possible to teach robots to solve this kind of tasks similarly to how a baby learn to walk; by trial and error.</p>
-<p><img data-src="images/drl_diagram.png" /></p>
-</section><section id="section-6" class="slide level2">
-<h2></h2>
-<p>This learning can be obtained directly on the physical robot, but this involves a couple of problems:</p>
-<ol type="1">
-<li><p>Data sampling is very <strong>inefficient</strong> and it would take hundreds of hours to solve a task, in addition to the need to design an automatic system to restart the physical test environment or directly depend on human operators.</p></li>
-<li><p>And some Deep RL methods employ scanning mechanisms that could result in <strong>dangerous</strong> actions for the robot and the surrounding environment.</p></li>
-</ol>
-</section><section id="section-7" class="slide level2">
-<h2></h2>
-<p>A very attractive alternative is gather all the data necessary for the training purely in simulation, and then deploy the learned control policy in a physical robot.</p>
+<p><img src="images/model_based_task.png" style="display: block; margin: auto;" /></p>
+</section><section id="drl-approach" class="slide level2">
+<h2>DRL approach</h2>
+<p>However, the latest advances in DRL applied to robotic control have shown that it is possible to teach robots to solve this kind of tasks by trial and error.</p>
+<p><img src="images/drl_diagram.png" style="display: block; margin: auto;" /></p>
+</section><section id="where-to-get-the-data" class="slide level2">
+<h2>Where to get the data?</h2>
+<p>We can gather all the data necessary for the training in simulation, and then deploy the learned control policy in a physical robot.</p>
 <video data-autoplay src="videos/fetch_push.mp4" loop="loop" width="300" height="300">
 </video>
 <video data-autoplay src="videos/shadow_hand_block.mp4" loop="loop" width="300" height="300">
 </video>
 <video data-autoplay src="videos/humanoid.mp4" loop="loop" width="300" height="300">
 </video>
-</section><section id="section-8" class="slide level2">
-<h2></h2>
-<p>However, simulation environments do not represent the full complexity of the real world, and the policies learned in these virtual environments only perform well under conditions similar to those seen during the training phase. This disparity between virtual simulation environments and the real world is known as the <em>“reality gap”</em>.</p>
-</section><section id="section-9" class="slide level2">
-<h2></h2>
-<p>But, in the latest advances in Deep RL applied to robot control have shown <a href="#/ref">(Peng et al. 2018sim, Akkaya et al. 2019)</a> that it is possible to overcome this barrier using techniques that randomly modify the dynamics of the simulator during the training phase in order to expose the agent to a wide range of variations in the environment, this forces the agent to <strong>learn to adapt</strong> to the constant changes in the environment.</p>
-<p><img data-src="images/dr_crop.png" style="width:80.0%" /></p>
+</section><section id="reality-gap" class="slide level2">
+<h2>Reality Gap</h2>
+<p>However, simulation environments do <strong>not represent</strong> the full complexity of the real world, and the policies learned in these virtual environments only perform well under conditions similar to those seen during the training phase. This disparity between virtual simulation environments and the real world is known as the <strong>reality gap</strong>.</p>
+<p><img src="images/sim_to_real.png" style="display: block; margin: auto;" /></p>
+</section><section id="dradr" class="slide level2">
+<h2>DR/ADR</h2>
+<p><span class="citation" data-cites="peng2018sim akkaya2019solving">(Peng et al. 2018; Akkaya et al. 2019)</span> shown that it is possible to overcome this barrier using techniques that <strong>randomly modify the dynamics of the simulator</strong> during the training phase in order to expose the agent to a wide range of variations in the environment, this forces the agent to <strong>learn to adapt</strong> to the constant changes in the environment.</p>
+<p><img src="images/dr_crop.png" style="display: block; margin: auto;" /></p>
 </section><section id="hypothesis" class="slide level2">
 <h2>Hypothesis</h2>
 <blockquote>
-<p>If we randomly modify the dynamics of a simulation environment in order to learn a robust control policy for solving a dexterous manipulation task, then it is possible to transfer this learned policy to a physical robot and solve the task without any fine-tuning.</p>
+<p>If we randomly modify the dynamics of a simulation environment in order to learn a robust control policy for solving a dexterous manipulation task, then it is possible to transfer this learned policy to a physical robot and solve the task with little or any fine-tuning.</p>
 </blockquote>
-</section><section id="objetives" class="slide level2">
+</section><section id="objectives" class="slide level2">
 <h2>General objective</h2>
 <p>The general objective of this thesis project is:</p>
-<p>Train an agent purely in simulation to solve a specific dexterous manipulation task using reinforcement learning algorithms and domain randomization techniques to transfer the learned policy in a physical robot</p>
+<ul>
+<li>Train an agent in simulation to solve a specific dexterous manipulation task using reinforcement learning algorithms with domain randomization techniques and then transfer the learned policy to a physical robot.</li>
+</ul>
 </section><section id="specific-objectives" class="slide level2">
 <h2>Specific objectives</h2>
 <p>The following objectives emerge from the main objective of this research:</p>
-<ol type="1">
-<li>Select a state-of-the-art simulator that meets the requirements of the selected task and reinforcement learning algorithms.</li>
-<li>Document me in the use of the selected robotics simulator and generate the virtual test environment for the selected task.</li>
-<li>Review of the state-of-the-art in reinforcement learning algorithms for robot control.</li>
-</ol>
-</section><section id="section-10" class="slide level2">
-<h2></h2>
-<ol start="4" type="1">
-<li>Implement one or more of the state-of-the-art RL algorithms for robot control to solve the selected task in the simulation environment (without domain randomization).</li>
-<li>Review of the state-of-the-art of domain randomization techniques.</li>
-<li>Implement state-of-the-art techniques in domain randomization and retrain the agent to solve the selected task.</li>
-<li>Transfer the policies learned in simulation (with and without domain randomization) to the physical robot and make a comparison of performance in the selected task.</li>
-<li>Communicate the results.</li>
-</ol>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Task</th>
+<th style="text-align: left;">Start</th>
+<th style="text-align: right;">Duration</th>
+<th style="text-align: left;">Type</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Review Deep RL literature</td>
+<td style="text-align: left;">2020-07-15</td>
+<td style="text-align: right;">60</td>
+<td style="text-align: left;">Research</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Select state-of-the-art simulator</td>
+<td style="text-align: left;">2020-09-15</td>
+<td style="text-align: right;">15</td>
+<td style="text-align: left;">Research</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Learn to use the simulator</td>
+<td style="text-align: left;">2020-09-30</td>
+<td style="text-align: right;">60</td>
+<td style="text-align: left;">Learning</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Create simulation environment</td>
+<td style="text-align: left;">2020-12-01</td>
+<td style="text-align: right;">30</td>
+<td style="text-align: left;">Develop</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Train first agent without DR/ADR</td>
+<td style="text-align: left;">2021-01-01</td>
+<td style="text-align: right;">30</td>
+<td style="text-align: left;">Develop</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Review state-of-the-art DR/ADR</td>
+<td style="text-align: left;">2021-02-01</td>
+<td style="text-align: right;">15</td>
+<td style="text-align: left;">Research</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Tranin second agent with DR/ADR</td>
+<td style="text-align: left;">2021-02-15</td>
+<td style="text-align: right;">30</td>
+<td style="text-align: left;">Develop</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Transfer policies to real robot</td>
+<td style="text-align: left;">2021-03-15</td>
+<td style="text-align: right;">30</td>
+<td style="text-align: left;">Develop</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Make a comparative between both policies</td>
+<td style="text-align: left;">2021-04-15</td>
+<td style="text-align: right;">30</td>
+<td style="text-align: left;">Analysis</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Write the thesis</td>
+<td style="text-align: left;">2021-03-15</td>
+<td style="text-align: right;">120</td>
+<td style="text-align: left;">Writing</td>
+</tr>
+</tbody>
+</table>
 </section><section id="scientific-contribution" class="slide level2">
 <h2>Scientific contribution</h2>
-<p>The main contribution of this work is to solve a dexterous manipulation task<span class="math inline">\(^{*}\)</span> with a redundant serial robot by training an agent purely in simulation.</p>
+<p>The main contribution of this work is to solve a dexterous manipulation task (<em>probably throwing objects, like balls, out of the robot’s reach range</em>) with a redundant serial robot by training an agent in simulation.</p>
 </section></section>
-<section><section id="activities" class="title-slide slide level1"><h1>Chronogram of activities</h1></section><section id="section-11" class="slide level2">
+<section><section id="progress" class="title-slide slide level1"><h1>Current progress</h1></section><section id="section-2" class="slide level2">
 <h2></h2>
-<div id="htmlwidget-114b04edf04fdeef168f" style="width:768px;height:576px;" class="plotly html-widget"></div>
-<script type="application/json" data-for="htmlwidget-114b04edf04fdeef168f">{"x":{"visdat":{"330957ce6f0e5":["function () ","plotlyVisDat"]},"cur_data":"330957ce6f0e5","attrs":{"330957ce6f0e5":{"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"x":["2020-07-15","2020-09-13"],"y":[10,10],"mode":"lines","line":{"color":"#E78AC3","width":20},"showlegend":false,"hoverinfo":"text","text":"Task:  Review Deep RL literature <br> Duration:  60 days<br> Type:  Research","evaluate":true,"inherit":true},"330957ce6f0e5.1":{"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"x":["2020-09-15","2020-09-30"],"y":[9,9],"mode":"lines","line":{"color":"#E78AC3","width":20},"showlegend":false,"hoverinfo":"text","text":"Task:  Select state-of-the-art simulator <br> Duration:  15 days<br> Type:  Research","evaluate":true,"inherit":true},"330957ce6f0e5.2":{"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"x":["2020-09-30","2020-11-29"],"y":[8,8],"mode":"lines","line":{"color":"#8DA0CB","width":20},"showlegend":false,"hoverinfo":"text","text":"Task:  Learn to use the simulator <br> Duration:  60 days<br> Type:  Learning","evaluate":true,"inherit":true},"330957ce6f0e5.3":{"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"x":["2020-12-01","2020-12-31"],"y":[7,7],"mode":"lines","line":{"color":"#FC8D62","width":20},"showlegend":false,"hoverinfo":"text","text":"Task:  Create simulation environment <br> Duration:  30 days<br> Type:  Develop","evaluate":true,"inherit":true},"330957ce6f0e5.4":{"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"x":["2021-01-01","2021-01-31"],"y":[6,6],"mode":"lines","line":{"color":"#FC8D62","width":20},"showlegend":false,"hoverinfo":"text","text":"Task:  Train first agent without DR/ADR <br> Duration:  30 days<br> Type:  Develop","evaluate":true,"inherit":true},"330957ce6f0e5.5":{"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"x":["2021-02-01","2021-02-16"],"y":[5,5],"mode":"lines","line":{"color":"#E78AC3","width":20},"showlegend":false,"hoverinfo":"text","text":"Task:  Review state-of-the-art DR/ADR <br> Duration:  15 days<br> Type:  Research","evaluate":true,"inherit":true},"330957ce6f0e5.6":{"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"x":["2021-02-15","2021-03-17"],"y":[4,4],"mode":"lines","line":{"color":"#FC8D62","width":20},"showlegend":false,"hoverinfo":"text","text":"Task:  Tranin second agent with DR/ADR <br> Duration:  30 days<br> Type:  Develop","evaluate":true,"inherit":true},"330957ce6f0e5.7":{"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"x":["2021-03-15","2021-04-14"],"y":[3,3],"mode":"lines","line":{"color":"#FC8D62","width":20},"showlegend":false,"hoverinfo":"text","text":"Task:  Transfer policies to real robot <br> Duration:  30 days<br> Type:  Develop","evaluate":true,"inherit":true},"330957ce6f0e5.8":{"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"x":["2021-04-15","2021-05-15"],"y":[2,2],"mode":"lines","line":{"color":"#66C2A5","width":20},"showlegend":false,"hoverinfo":"text","text":"Task:  Make a comparative between both policies <br> Duration:  30 days<br> Type:  Analysis","evaluate":true,"inherit":true},"330957ce6f0e5.9":{"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"x":["2021-03-15","2021-07-13"],"y":[1,1],"mode":"lines","line":{"color":"#A6D854","width":20},"showlegend":false,"hoverinfo":"text","text":"Task:  Write the thesis <br> Duration:  120 days<br> Type:  Writing","evaluate":true,"inherit":true}},"layout":{"width":900,"height":600,"margin":{"b":40,"l":60,"t":25,"r":10},"xaxis":{"domain":[0,1],"automargin":true,"showgrid":true,"tickfont":{"color":"#000000"},"title":[]},"yaxis":{"domain":[0,0.9],"automargin":true,"showgrid":true,"tickfont":{"color":"#000000"},"tickmode":"array","tickvals":[10,9,8,7,6,5,4,3,2,1],"ticktext":["Review Deep RL literature","Select state-of-the-art simulator","Learn to use the simulator","Create simulation environment","Train first agent without DR/ADR","Review state-of-the-art DR/ADR","Tranin second agent with DR/ADR","Transfer policies to real robot","Make a comparative between both policies","Write the thesis"],"title":[]},"legend":{"orientation":"h"},"hovermode":"closest","showlegend":false},"source":"A","config":{"showSendToCloud":false},"data":[{"x":["2020-07-15","2020-09-13"],"y":[10,10],"mode":"lines","line":{"color":"#E78AC3","width":20},"showlegend":false,"hoverinfo":["text","text"],"text":["Task:  Review Deep RL literature <br> Duration:  60 days<br> Type:  Research","Task:  Review Deep RL literature <br> Duration:  60 days<br> Type:  Research"],"evaluate":true,"type":"scatter","marker":{"color":"rgba(31,119,180,1)","line":{"color":"rgba(31,119,180,1)"}},"error_y":{"color":"rgba(31,119,180,1)"},"error_x":{"color":"rgba(31,119,180,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["2020-09-15","2020-09-30"],"y":[9,9],"mode":"lines","line":{"color":"#E78AC3","width":20},"showlegend":false,"hoverinfo":["text","text"],"text":["Task:  Select state-of-the-art simulator <br> Duration:  15 days<br> Type:  Research","Task:  Select state-of-the-art simulator <br> Duration:  15 days<br> Type:  Research"],"evaluate":true,"type":"scatter","marker":{"color":"rgba(255,127,14,1)","line":{"color":"rgba(255,127,14,1)"}},"error_y":{"color":"rgba(255,127,14,1)"},"error_x":{"color":"rgba(255,127,14,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["2020-09-30","2020-11-29"],"y":[8,8],"mode":"lines","line":{"color":"#8DA0CB","width":20},"showlegend":false,"hoverinfo":["text","text"],"text":["Task:  Learn to use the simulator <br> Duration:  60 days<br> Type:  Learning","Task:  Learn to use the simulator <br> Duration:  60 days<br> Type:  Learning"],"evaluate":true,"type":"scatter","marker":{"color":"rgba(44,160,44,1)","line":{"color":"rgba(44,160,44,1)"}},"error_y":{"color":"rgba(44,160,44,1)"},"error_x":{"color":"rgba(44,160,44,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["2020-12-01","2020-12-31"],"y":[7,7],"mode":"lines","line":{"color":"#FC8D62","width":20},"showlegend":false,"hoverinfo":["text","text"],"text":["Task:  Create simulation environment <br> Duration:  30 days<br> Type:  Develop","Task:  Create simulation environment <br> Duration:  30 days<br> Type:  Develop"],"evaluate":true,"type":"scatter","marker":{"color":"rgba(214,39,40,1)","line":{"color":"rgba(214,39,40,1)"}},"error_y":{"color":"rgba(214,39,40,1)"},"error_x":{"color":"rgba(214,39,40,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["2021-01-01","2021-01-31"],"y":[6,6],"mode":"lines","line":{"color":"#FC8D62","width":20},"showlegend":false,"hoverinfo":["text","text"],"text":["Task:  Train first agent without DR/ADR <br> Duration:  30 days<br> Type:  Develop","Task:  Train first agent without DR/ADR <br> Duration:  30 days<br> Type:  Develop"],"evaluate":true,"type":"scatter","marker":{"color":"rgba(148,103,189,1)","line":{"color":"rgba(148,103,189,1)"}},"error_y":{"color":"rgba(148,103,189,1)"},"error_x":{"color":"rgba(148,103,189,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["2021-02-01","2021-02-16"],"y":[5,5],"mode":"lines","line":{"color":"#E78AC3","width":20},"showlegend":false,"hoverinfo":["text","text"],"text":["Task:  Review state-of-the-art DR/ADR <br> Duration:  15 days<br> Type:  Research","Task:  Review state-of-the-art DR/ADR <br> Duration:  15 days<br> Type:  Research"],"evaluate":true,"type":"scatter","marker":{"color":"rgba(140,86,75,1)","line":{"color":"rgba(140,86,75,1)"}},"error_y":{"color":"rgba(140,86,75,1)"},"error_x":{"color":"rgba(140,86,75,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["2021-02-15","2021-03-17"],"y":[4,4],"mode":"lines","line":{"color":"#FC8D62","width":20},"showlegend":false,"hoverinfo":["text","text"],"text":["Task:  Tranin second agent with DR/ADR <br> Duration:  30 days<br> Type:  Develop","Task:  Tranin second agent with DR/ADR <br> Duration:  30 days<br> Type:  Develop"],"evaluate":true,"type":"scatter","marker":{"color":"rgba(227,119,194,1)","line":{"color":"rgba(227,119,194,1)"}},"error_y":{"color":"rgba(227,119,194,1)"},"error_x":{"color":"rgba(227,119,194,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["2021-03-15","2021-04-14"],"y":[3,3],"mode":"lines","line":{"color":"#FC8D62","width":20},"showlegend":false,"hoverinfo":["text","text"],"text":["Task:  Transfer policies to real robot <br> Duration:  30 days<br> Type:  Develop","Task:  Transfer policies to real robot <br> Duration:  30 days<br> Type:  Develop"],"evaluate":true,"type":"scatter","marker":{"color":"rgba(127,127,127,1)","line":{"color":"rgba(127,127,127,1)"}},"error_y":{"color":"rgba(127,127,127,1)"},"error_x":{"color":"rgba(127,127,127,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["2021-04-15","2021-05-15"],"y":[2,2],"mode":"lines","line":{"color":"#66C2A5","width":20},"showlegend":false,"hoverinfo":["text","text"],"text":["Task:  Make a comparative between both policies <br> Duration:  30 days<br> Type:  Analysis","Task:  Make a comparative between both policies <br> Duration:  30 days<br> Type:  Analysis"],"evaluate":true,"type":"scatter","marker":{"color":"rgba(188,189,34,1)","line":{"color":"rgba(188,189,34,1)"}},"error_y":{"color":"rgba(188,189,34,1)"},"error_x":{"color":"rgba(188,189,34,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["2021-03-15","2021-07-13"],"y":[1,1],"mode":"lines","line":{"color":"#A6D854","width":20},"showlegend":false,"hoverinfo":["text","text"],"text":["Task:  Write the thesis <br> Duration:  120 days<br> Type:  Writing","Task:  Write the thesis <br> Duration:  120 days<br> Type:  Writing"],"evaluate":true,"type":"scatter","marker":{"color":"rgba(23,190,207,1)","line":{"color":"rgba(23,190,207,1)"}},"error_y":{"color":"rgba(23,190,207,1)"},"error_x":{"color":"rgba(23,190,207,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+<p>I’m working on the first specific objective “Review Deep RL literature”, for that, I’m actively reading the state-of-the-art papers and also the following RL/DRL books:</p>
+<p><img src="images/rl_books_covers.png" width="100%" style="display: block; margin: auto;" /></p>
+</section><section id="section-3" class="slide level2">
+<h2></h2>
+<p>In addition to the literature review work, I started taking two RL/ML courses:</p>
+<ul>
+<li>OpenAI’s <a href="https://spinningup.openai.com/en/latest/">Spinning Up in Deep RL</a></li>
+</ul>
+<p><img src="images/spinning-up-logo2.png" style="display: block; margin: auto;" /></p>
+<ul>
+<li>Google’s <a href="https://developers.google.com/machine-learning/crash-course">Machine Learning Crash Course</a></li>
+</ul>
+<p><img src="images/google_ml_course.png" width="50%" style="display: block; margin: auto;" /></p>
+</section><section id="section-4" class="slide level2">
+<h2></h2>
+<p>Also, I have made progress on my second objective “Select state-of-the art simulation”. For my CAD course, I developed a project for path-planning in manufacturing process with robots on free-form surfaces, using one of the state-of-the-art robotics simulators (CoppeliaSim with PyRep ML toolkit).</p>
+<center>
+<video data-autoplay src="videos/pyrep_demo.m4v" loop="loop" width="800" height="450">
+</video>
+</center>
 </section></section>
-<section><section id="references" class="title-slide slide level1"><h1>References</h1></section><section id="section-12" class="slide level2">
+<section><section id="activities" class="title-slide slide level1"><h1>Chronogram of activities</h1></section><section id="section-5" class="slide level2">
 <h2></h2>
-<ol type="1">
-<li><p>Ilge Akkaya, Marcin Andrychowicz, Maciek Chociej, Mateusz Litwin, Bob McGrew, Arthur Petron, Alex Paino, Matthias Plappert, Glenn Powell, Raphael Ribas, et al. Solving rubik’s cube with a robot hand. arXiv preprint arXiv:1910.07113, 2019.</p></li>
-<li><p>OpenAI, Marcin Andrychowicz, Bowen Baker, Maciek Chociej, Rafal Jozefowicz, Bob McGrew, Jakub Pa- chocki, Arthur Petron, Matthias Plappert, Glenn Powell, Alex Ray, Jonas Schneider, Szymon Sidor, Josh Tobin, Peter Welinder, Lilian Weng, and Wojciech Zaremba. Learning dexterous in-hand manipulation, 2018.</p></li>
-<li><p>Wenbo Gao, Laura Graesser, Krzysztof Choromanski, Xingyou Song, Nevena Lazic, Pannag Sanketi, Vikas Sindhwani, and Navdeep Jaitly. Robotic table tennis with model-free reinforcement learning. arXiv preprint arXiv:2003.14398, 2020.</p></li>
-</ol>
-</section><section id="section-13" class="slide level2">
+<div id="htmlwidget-8d8963a3673a641b68cd" style="width:768px;height:576px;" class="plotly html-widget"></div>
+<script type="application/json" data-for="htmlwidget-8d8963a3673a641b68cd">{"x":{"visdat":{"3e1984adba384":["function () ","plotlyVisDat"]},"cur_data":"3e1984adba384","attrs":{"3e1984adba384":{"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"x":["2020-07-15","2020-09-13"],"y":[10,10],"mode":"lines","line":{"color":"#E78AC3","width":20},"showlegend":false,"hoverinfo":"text","text":"Task:  Review Deep RL literature <br> Duration:  60 days<br> Type:  Research","evaluate":true,"inherit":true},"3e1984adba384.1":{"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"x":["2020-09-15","2020-09-30"],"y":[9,9],"mode":"lines","line":{"color":"#E78AC3","width":20},"showlegend":false,"hoverinfo":"text","text":"Task:  Select state-of-the-art simulator <br> Duration:  15 days<br> Type:  Research","evaluate":true,"inherit":true},"3e1984adba384.2":{"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"x":["2020-09-30","2020-11-29"],"y":[8,8],"mode":"lines","line":{"color":"#8DA0CB","width":20},"showlegend":false,"hoverinfo":"text","text":"Task:  Learn to use the simulator <br> Duration:  60 days<br> Type:  Learning","evaluate":true,"inherit":true},"3e1984adba384.3":{"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"x":["2020-12-01","2020-12-31"],"y":[7,7],"mode":"lines","line":{"color":"#FC8D62","width":20},"showlegend":false,"hoverinfo":"text","text":"Task:  Create simulation environment <br> Duration:  30 days<br> Type:  Develop","evaluate":true,"inherit":true},"3e1984adba384.4":{"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"x":["2021-01-01","2021-01-31"],"y":[6,6],"mode":"lines","line":{"color":"#FC8D62","width":20},"showlegend":false,"hoverinfo":"text","text":"Task:  Train first agent without DR/ADR <br> Duration:  30 days<br> Type:  Develop","evaluate":true,"inherit":true},"3e1984adba384.5":{"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"x":["2021-02-01","2021-02-16"],"y":[5,5],"mode":"lines","line":{"color":"#E78AC3","width":20},"showlegend":false,"hoverinfo":"text","text":"Task:  Review state-of-the-art DR/ADR <br> Duration:  15 days<br> Type:  Research","evaluate":true,"inherit":true},"3e1984adba384.6":{"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"x":["2021-02-15","2021-03-17"],"y":[4,4],"mode":"lines","line":{"color":"#FC8D62","width":20},"showlegend":false,"hoverinfo":"text","text":"Task:  Tranin second agent with DR/ADR <br> Duration:  30 days<br> Type:  Develop","evaluate":true,"inherit":true},"3e1984adba384.7":{"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"x":["2021-03-15","2021-04-14"],"y":[3,3],"mode":"lines","line":{"color":"#FC8D62","width":20},"showlegend":false,"hoverinfo":"text","text":"Task:  Transfer policies to real robot <br> Duration:  30 days<br> Type:  Develop","evaluate":true,"inherit":true},"3e1984adba384.8":{"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"x":["2021-04-15","2021-05-15"],"y":[2,2],"mode":"lines","line":{"color":"#66C2A5","width":20},"showlegend":false,"hoverinfo":"text","text":"Task:  Make a comparative between both policies <br> Duration:  30 days<br> Type:  Analysis","evaluate":true,"inherit":true},"3e1984adba384.9":{"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"x":["2021-03-15","2021-07-13"],"y":[1,1],"mode":"lines","line":{"color":"#A6D854","width":20},"showlegend":false,"hoverinfo":"text","text":"Task:  Write the thesis <br> Duration:  120 days<br> Type:  Writing","evaluate":true,"inherit":true}},"layout":{"width":900,"height":600,"margin":{"b":40,"l":60,"t":25,"r":10},"xaxis":{"domain":[0,1],"automargin":true,"showgrid":true,"tickfont":{"color":"#000000"},"title":[]},"yaxis":{"domain":[0,0.9],"automargin":true,"showgrid":true,"tickfont":{"color":"#000000"},"tickmode":"array","tickvals":[10,9,8,7,6,5,4,3,2,1],"ticktext":["Review Deep RL literature","Select state-of-the-art simulator","Learn to use the simulator","Create simulation environment","Train first agent without DR/ADR","Review state-of-the-art DR/ADR","Tranin second agent with DR/ADR","Transfer policies to real robot","Make a comparative between both policies","Write the thesis"],"title":[]},"legend":{"orientation":"h"},"hovermode":"closest","showlegend":false},"source":"A","config":{"showSendToCloud":false},"data":[{"x":["2020-07-15","2020-09-13"],"y":[10,10],"mode":"lines","line":{"color":"#E78AC3","width":20},"showlegend":false,"hoverinfo":["text","text"],"text":["Task:  Review Deep RL literature <br> Duration:  60 days<br> Type:  Research","Task:  Review Deep RL literature <br> Duration:  60 days<br> Type:  Research"],"evaluate":true,"type":"scatter","marker":{"color":"rgba(31,119,180,1)","line":{"color":"rgba(31,119,180,1)"}},"error_y":{"color":"rgba(31,119,180,1)"},"error_x":{"color":"rgba(31,119,180,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["2020-09-15","2020-09-30"],"y":[9,9],"mode":"lines","line":{"color":"#E78AC3","width":20},"showlegend":false,"hoverinfo":["text","text"],"text":["Task:  Select state-of-the-art simulator <br> Duration:  15 days<br> Type:  Research","Task:  Select state-of-the-art simulator <br> Duration:  15 days<br> Type:  Research"],"evaluate":true,"type":"scatter","marker":{"color":"rgba(255,127,14,1)","line":{"color":"rgba(255,127,14,1)"}},"error_y":{"color":"rgba(255,127,14,1)"},"error_x":{"color":"rgba(255,127,14,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["2020-09-30","2020-11-29"],"y":[8,8],"mode":"lines","line":{"color":"#8DA0CB","width":20},"showlegend":false,"hoverinfo":["text","text"],"text":["Task:  Learn to use the simulator <br> Duration:  60 days<br> Type:  Learning","Task:  Learn to use the simulator <br> Duration:  60 days<br> Type:  Learning"],"evaluate":true,"type":"scatter","marker":{"color":"rgba(44,160,44,1)","line":{"color":"rgba(44,160,44,1)"}},"error_y":{"color":"rgba(44,160,44,1)"},"error_x":{"color":"rgba(44,160,44,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["2020-12-01","2020-12-31"],"y":[7,7],"mode":"lines","line":{"color":"#FC8D62","width":20},"showlegend":false,"hoverinfo":["text","text"],"text":["Task:  Create simulation environment <br> Duration:  30 days<br> Type:  Develop","Task:  Create simulation environment <br> Duration:  30 days<br> Type:  Develop"],"evaluate":true,"type":"scatter","marker":{"color":"rgba(214,39,40,1)","line":{"color":"rgba(214,39,40,1)"}},"error_y":{"color":"rgba(214,39,40,1)"},"error_x":{"color":"rgba(214,39,40,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["2021-01-01","2021-01-31"],"y":[6,6],"mode":"lines","line":{"color":"#FC8D62","width":20},"showlegend":false,"hoverinfo":["text","text"],"text":["Task:  Train first agent without DR/ADR <br> Duration:  30 days<br> Type:  Develop","Task:  Train first agent without DR/ADR <br> Duration:  30 days<br> Type:  Develop"],"evaluate":true,"type":"scatter","marker":{"color":"rgba(148,103,189,1)","line":{"color":"rgba(148,103,189,1)"}},"error_y":{"color":"rgba(148,103,189,1)"},"error_x":{"color":"rgba(148,103,189,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["2021-02-01","2021-02-16"],"y":[5,5],"mode":"lines","line":{"color":"#E78AC3","width":20},"showlegend":false,"hoverinfo":["text","text"],"text":["Task:  Review state-of-the-art DR/ADR <br> Duration:  15 days<br> Type:  Research","Task:  Review state-of-the-art DR/ADR <br> Duration:  15 days<br> Type:  Research"],"evaluate":true,"type":"scatter","marker":{"color":"rgba(140,86,75,1)","line":{"color":"rgba(140,86,75,1)"}},"error_y":{"color":"rgba(140,86,75,1)"},"error_x":{"color":"rgba(140,86,75,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["2021-02-15","2021-03-17"],"y":[4,4],"mode":"lines","line":{"color":"#FC8D62","width":20},"showlegend":false,"hoverinfo":["text","text"],"text":["Task:  Tranin second agent with DR/ADR <br> Duration:  30 days<br> Type:  Develop","Task:  Tranin second agent with DR/ADR <br> Duration:  30 days<br> Type:  Develop"],"evaluate":true,"type":"scatter","marker":{"color":"rgba(227,119,194,1)","line":{"color":"rgba(227,119,194,1)"}},"error_y":{"color":"rgba(227,119,194,1)"},"error_x":{"color":"rgba(227,119,194,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["2021-03-15","2021-04-14"],"y":[3,3],"mode":"lines","line":{"color":"#FC8D62","width":20},"showlegend":false,"hoverinfo":["text","text"],"text":["Task:  Transfer policies to real robot <br> Duration:  30 days<br> Type:  Develop","Task:  Transfer policies to real robot <br> Duration:  30 days<br> Type:  Develop"],"evaluate":true,"type":"scatter","marker":{"color":"rgba(127,127,127,1)","line":{"color":"rgba(127,127,127,1)"}},"error_y":{"color":"rgba(127,127,127,1)"},"error_x":{"color":"rgba(127,127,127,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["2021-04-15","2021-05-15"],"y":[2,2],"mode":"lines","line":{"color":"#66C2A5","width":20},"showlegend":false,"hoverinfo":["text","text"],"text":["Task:  Make a comparative between both policies <br> Duration:  30 days<br> Type:  Analysis","Task:  Make a comparative between both policies <br> Duration:  30 days<br> Type:  Analysis"],"evaluate":true,"type":"scatter","marker":{"color":"rgba(188,189,34,1)","line":{"color":"rgba(188,189,34,1)"}},"error_y":{"color":"rgba(188,189,34,1)"},"error_x":{"color":"rgba(188,189,34,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["2021-03-15","2021-07-13"],"y":[1,1],"mode":"lines","line":{"color":"#A6D854","width":20},"showlegend":false,"hoverinfo":["text","text"],"text":["Task:  Write the thesis <br> Duration:  120 days<br> Type:  Writing","Task:  Write the thesis <br> Duration:  120 days<br> Type:  Writing"],"evaluate":true,"type":"scatter","marker":{"color":"rgba(23,190,207,1)","line":{"color":"rgba(23,190,207,1)"}},"error_y":{"color":"rgba(23,190,207,1)"},"error_x":{"color":"rgba(23,190,207,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</section></section>
+<section><section id="references" class="title-slide slide level1"><h1>References</h1></section><section id="section-6" class="slide level2">
 <h2></h2>
-<ol start="4" type="1">
-<li><p>Volodymyr Mnih, Koray Kavukcuoglu, David Silver, Alex Graves, Ioannis Antonoglou, Daan Wierstra, and Martin Riedmiller. Playing atari with deep reinforcement learning. arXiv preprint arXiv:1312.5602, 2013.</p></li>
-<li><p>OpenAI. Openai five. <a href="https://blog.openai.com/openai-five/" class="uri">https://blog.openai.com/openai-five/</a>, 2018.</p></li>
-<li><p>Xue Bin Peng, Marcin Andrychowicz, Wojciech Zaremba, and Pieter Abbeel. Sim-to-real transfer of robotic control with dynamics randomization. In 2018 IEEE international conference on robotics and automation (ICRA), pages 1–8. IEEE, 2018.</p></li>
-<li><p>David Silver, Thomas Hubert, Julian Schrittwieser, Ioannis Antonoglou, Matthew Lai, Arthur Guez, Marc Lanctot, Laurent Sifre, Dharshan Kumaran, Thore Graepel, et al. Mastering chess and shogi by self-play with a general reinforcement learning algorithm. arXiv preprint arXiv:1712.01815, 2017.</p></li>
-</ol>
-</section><section id="section-14" class="slide level2">
+<div id="refs" style="width: 1000px; height: 600px; overflow-y: scroll;">
+<div id="ref-akkaya2019solving">
+<p>Akkaya, Ilge, Marcin Andrychowicz, Maciek Chociej, Mateusz Litwin, Bob McGrew, Arthur Petron, Alex Paino, et al. 2019. “Solving Rubik’s Cube with a Robot Hand.” <em>arXiv Preprint arXiv:1910.07113</em>.</p>
+</div>
+<div id="ref-gao2020robotic">
+<p>Gao, Wenbo, Laura Graesser, Krzysztof Choromanski, Xingyou Song, Nevena Lazic, Pannag Sanketi, Vikas Sindhwani, and Navdeep Jaitly. 2020. “Robotic Table Tennis with Model-Free Reinforcement Learning.” <em>arXiv Preprint arXiv:2003.14398</em>.</p>
+</div>
+<div id="ref-gu2017deep">
+<p>Gu, Shixiang, Ethan Holly, Timothy Lillicrap, and Sergey Levine. 2017. “Deep Reinforcement Learning for Robotic Manipulation with Asynchronous Off-Policy Updates.” In <em>2017 Ieee International Conference on Robotics and Automation (Icra)</em>, 3389–96. IEEE.</p>
+</div>
+<div id="ref-mnih2013playing">
+<p>Mnih, Volodymyr, Koray Kavukcuoglu, David Silver, Alex Graves, Ioannis Antonoglou, Daan Wierstra, and Martin Riedmiller. 2013. “Playing Atari with Deep Reinforcement Learning.” <em>arXiv Preprint arXiv:1312.5602</em>.</p>
+</div>
+<div id="ref-OpenAI_dota">
+<p>OpenAI. 2018. “OpenAI Five.” <a href="https://blog.openai.com/openai-five/">https://blog.openai.com/openai-five/</a>.</p>
+</div>
+<div id="ref-openai2018learning">
+<p>OpenAI, Marcin Andrychowicz, Bowen Baker, Maciek Chociej, Rafal Jozefowicz, Bob McGrew, Jakub Pachocki, et al. 2018. “Learning Dexterous in-Hand Manipulation.” <a href="http://arxiv.org/abs/1808.00177">http://arxiv.org/abs/1808.00177</a>.</p>
+</div>
+<div id="ref-peng2018sim">
+<p>Peng, Xue Bin, Marcin Andrychowicz, Wojciech Zaremba, and Pieter Abbeel. 2018. “Sim-to-Real Transfer of Robotic Control with Dynamics Randomization.” In <em>2018 Ieee International Conference on Robotics and Automation (Icra)</em>, 1–8. IEEE.</p>
+</div>
+<div id="ref-rajeswaran2017learning">
+<p>Rajeswaran, Aravind, Vikash Kumar, Abhishek Gupta, Giulia Vezzani, John Schulman, Emanuel Todorov, and Sergey Levine. 2017. “Learning Complex Dexterous Manipulation with Deep Reinforcement Learning and Demonstrations.” <em>arXiv Preprint arXiv:1709.10087</em>.</p>
+</div>
+<div id="ref-silver2016mastering">
+<p>Silver, David, Aja Huang, Chris J Maddison, Arthur Guez, Laurent Sifre, George Van Den Driessche, Julian Schrittwieser, et al. 2016. “Mastering the Game of Go with Deep Neural Networks and Tree Search.” <em>Nature</em> 529 (7587): 484–89.</p>
+</div>
+<div id="ref-silver2017mastering">
+<p>Silver, David, Thomas Hubert, Julian Schrittwieser, Ioannis Antonoglou, Matthew Lai, Arthur Guez, Marc Lanctot, et al. 2017. “Mastering Chess and Shogi by Self-Play with a General Reinforcement Learning Algorithm.” <em>arXiv Preprint arXiv:1712.01815</em>.</p>
+</div>
+<div id="ref-song2020rapidly">
+<p>Song, Xingyou, Yuxiang Yang, Krzysztof Choromanski, Ken Caluwaerts, Wenbo Gao, Chelsea Finn, and Jie Tan. 2020. “Rapidly Adaptable Legged Robots via Evolutionary Meta-Learning.” <em>arXiv Preprint arXiv:2003.01239</em>.</p>
+</div>
+<div id="ref-tan2018sim">
+<p>Tan, Jie, Tingnan Zhang, Erwin Coumans, Atil Iscen, Yunfei Bai, Danijar Hafner, Steven Bohez, and Vincent Vanhoucke. 2018. “Sim-to-Real: Learning Agile Locomotion for Quadruped Robots.” <em>arXiv Preprint arXiv:1804.10332</em>.</p>
+</div>
+<div id="ref-tobin2017domain">
+<p>Tobin, Josh, Rachel Fong, Alex Ray, Jonas Schneider, Wojciech Zaremba, and Pieter Abbeel. 2017. “Domain Randomization for Transferring Deep Neural Networks from Simulation to the Real World.” In <em>2017 Ieee/Rsj International Conference on Intelligent Robots and Systems (Iros)</em>, 23–30. IEEE.</p>
+</div>
+<div id="ref-zeng2020tossingbot">
+<p>Zeng, Andy, Shuran Song, Johnny Lee, Alberto Rodriguez, and Thomas Funkhouser. 2020. “Tossingbot: Learning to Throw Arbitrary Objects with Residual Physics.” <em>IEEE Transactions on Robotics</em>.</p>
+</div>
+</div>
+</section><section id="section-7" class="slide level2">
 <h2></h2>
-<ol start="8" type="1">
-<li><p>Xingyou Song, Yuxiang Yang, Krzysztof Choromanski, Ken Caluwaerts, Wenbo Gao, Chelsea Finn, and Jie Tan. Rapidly adaptable legged robots via evolutionary meta-learning. arXiv preprint arXiv:2003.01239, 2020.</p></li>
-<li><p>Jie Tan, Tingnan Zhang, Erwin Coumans, Atil Iscen, Yunfei Bai, Danijar Hafner, Steven Bohez, and Vincent Vanhoucke. Sim-to-real: Learning agile locomotion for quadruped robots. arXiv preprint arXiv:1804.10332, 2018.</p></li>
-<li><p>Josh Tobin, Rachel Fong, Alex Ray, Jonas Schneider, Wojciech Zaremba, and Pieter Abbeel. Domain randomization for transferring deep neural networks from simulation to the real world. In 2017 IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS), pages 23–30. IEEE, 2017.</p></li>
-<li><p>Andy Zeng, Shuran Song, Johnny Lee, Alberto Rodriguez, and Thomas Funkhouser. Tossingbot: Learning to throw arbitrary objects with residual physics. IEEE Transactions on Robotics, 2020.</p></li>
-</ol>
+<br>
+<center>
+<h1>
+Thank you for your attention ☕
+</h1>
+</center>
 </section></section>
     </div>
   </div>
