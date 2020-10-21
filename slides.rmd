@@ -1,6 +1,8 @@
 ---
 title: "Learning Dexterous Manipulation with Model-Free Deep Reinforcement Learning"
-author: "Luis Castillo"
+author: |
+  | <small>Thesis Director: Ph.D. Reyes Ríos Cabrera</small>
+  | <small>Author: Luis Castillo</small>
 output:
   revealjs::revealjs_presentation:
     self_contained: false
@@ -8,12 +10,13 @@ output:
     highlight: haddock
     transition: none
     center: true
-    fig_caption: no
+    fig_caption: false
     css: style.css
     reveal_options:
       slideNumber: true
       previewLinks: false
-# bibliography: references.bib
+bibliography: references.bib
+nocite: '@*'
 ---
 ## Presentation outline
 
@@ -26,125 +29,195 @@ output:
   + [Hypothesis](#hypothesis)
   + [Objectives](#objectives)
   + [Scientific Contribution](#scientific-contribution)
+* [Current Progress](#progress)
 * [Chronogram of activities](#activities)
 * [References](#references)
 
 # Introduction {#introduction}
 
 ##
-**Deep Reinforcement Learning** (Deep RL) methods have great potential in real-world application. They have recently shown that it can solve tasks with superior human performance in some scenarios, e.g. classic Atari games [(Mnih et al. 2013)](#ref), massive online multiplayer games [(OpenAI 2018)](#ref), or complicated board games [(Silver et al. 2017)](#ref).
+**Deep Reinforcement Learning** have great potential in real-world applications. Recent advances have shown that these methods can solve tasks with superior performance than humans in some scenarios, e.g. classic Atari games @mnih2013playing, complicated board games [@silver2016mastering; @silver2017mastering] or massive online multiplayer games @OpenAI_dota.
 
 <video data-autoplay src="videos/alphazero_2017_final.m4v" loop="loop" width="460" height="258"></video>
 <video data-autoplay src="videos/openai_five_dota_final.m4v" loop="loop" width="460" height="258"></video>
 
 ##
-Deep RL algorithms can be used to learn to control physical robots in real-time [(Gao et al. 2020)](#ref). Deep RL agents learn to solve a given task by interacting with an unknown, unstructured environment. Due to its simple and intuitive fundamentals and its great potential to solve complex problems, Deep RL has become one of the most appealing branches of artificial intelligence.
+DRL is not just for games. Due to the simplicity of the RL framework. The same algorithms for solving games can be used to control physical robots in real-time @gao2020robotic. However,  DRL methods **are not intended to completely replace ** traditional control approaches. But, these methods can be applied in **specific scenarios** or in combination with traditional methods.
 
 <video data-autoplay src="videos/dxl-tracker-trpo.m4v" loop="loop" width="280" height="157"></video>
 <video data-autoplay src="videos/create-docker-trpo.m4v" loop="loop" width="280" height="157"></video>
 <video data-autoplay src="videos/ur-reacher-6-trpo.m4v" loop="loop" width="280" height="157"></video>
 
-
 # State of the art {#state-of-the-art}
 
-##
-* [(Peng et al. 2018)](#ref) propose to use dynamics randomization to train recurrent policies in simulation, and deploy the learned policies directly on a physical robot, achieving good performance on an object pushing task, without calibration.
+## RL algorithms
+```{r rl_algos, echo=FALSE, fig.align='center'}
+knitr::include_graphics("images/rl_algorithms.svg")
+```
 
-* [(OpenAI et al. 2018)](#ref) proposes to learn dexterous manipulation with a five finger articulated hand, using Proximal Policy Optimization (PPO), with dynamic randomization (DR) in the simulation, achieving very good results in the physical system.
+## Sim-To-Real (1/4)
+@peng2018sim propose to use dynamics randomization (DR) to train in simulation, and deploy the learned policies directly on a physical robot to solve pushing object task, achieving good performance.
 
-* [(Akkaya et al. 2019)](#ref1) proposes a new algorithm to modify the dynamics of the simulator automatically called Automatic Domain Randomization (ADR), substantially improving the results obtained with DR. This is demonstrated by solving the Rubik's cube with a robotic hand.
+<center>
+  <video data-autoplay src="videos/peng2018.m4v" loop="loop" width="720" height="405"></video>
+</center>
 
-<!-- TODO: add the tossing bot paper -->
+## Sim-To-Real (2/4)
+@openai2018learning propose to learn dexterity of in-hand manipulation to perform object reorientation for a five-finger robotic hand, using PPO with DR in simulation. They use the same code for playing Dota 2 @OpenAI_dota.
+
+<center>
+  <video data-autoplay src="videos/shadow_hand_real_block_final.m4v" loop="loop" width="720" height="405"></video>
+</center>
+
+## Sim-To-Real (3/4)
+@tan2018sim propose to learn locomotion for quadruped robots. They learn control policies in simulation and deployed on a quadruped robot. They perform system identification for tuning the simulation parameters to improve the fidelity of the physics simulator.
+
+<center>
+  <video data-autoplay src="videos/tan2018.m4v" loop="loop" width="520" height="292"></video>
+</center>
+
+## Sim-To-Real (4/4)
+@zeng2020tossingbot propose an end-to-end AI system for picking and throwing objects. Achieving 85% of accuracy, more than double that achieved with analytical solutions (40%). They train the policy in simulation and then use an automatic system for fine-tuning on physical robot.
+
+<center>
+  <video data-autoplay src="videos/tossingbot.m4v" loop="loop" width="520" height="292"></video>
+</center>
 
 # Proposal description {#proposal-description}
 
 ## Motivation {#motivation}
-In most cases, the dynamic process of **robotic control** can be approximated as a **Markov Decision Process** (MDP) making it an ideal field to experiment with Deep RL algorithms. 
+In most cases, the dynamic process of **robotic control** can be approximated as an **MDP** making it an ideal field to experiment with DRL algorithms.
 
 In addition, recently, large technology companies and prestigious research centers have focused their research in this area, such as OpenAI, who solved the Rubik's cube with a five-finger articulated robotic hand completely in simulation.
 
 <video data-autoplay src="videos/shadow_rubik_normal.m4v" loop="loop" width="460" height="258"></video>
 <video data-autoplay src="videos/shadow_rubik_oclution.m4v" loop="loop" width="460" height="258"></video>
 
-##
-Training in simulation and then transferring learned policy to physical systems (i.e **sim-to-real**) or using expert human demonstrations are two approaches that satisfy satisfying and computational and safety requirements in robot learning tasks. Furthermore, robot simulators have been widely developed for decades, e.g. CoppeliaSim, MuJoCo, Gazebo and Pybullet.
+## Training in a physical world
+We can use DRL algorithms to train robust control policies directly in the physical robot. But this approach has some disadvantages:
+
+* **Sampling inefficient**: The training may take thousands of hours to solve a single task.
+
+* **Safety issues**: DRL methods use exploration techniques that can be result in dangerous actions.
+
+## Training in simulation
+Training in simulation and then transferring learned policy to physical systems (i.e, **sim-to-real**) or using expert human demonstrations are two approaches that satisfy computational and safety requirements in robot learning tasks.
 
 <video data-autoplay src="videos/shadow_hand_block.mp4" loop="loop" width="292" height="292"></video>
 <video data-autoplay src="videos/shadow_hand_real_block_final.m4v" loop="loop" width="520" height="292"></video>
 
-## Background {#background}
-Machine learning (ML) is the field of AI that studies the process of learning from data to make predictions and/or decisions. It is generally categorized into supervised, unsupervised and reinforcement learning.
-
-![Machine Learning classification](images/mrl_classification.png){width=50%}
-
-## Reinforcement learning
+## Background: RL {#background}
 Reinforcement Learning (RL) is a subfield of ML that address the problem of automatic learning for optimal decisions over time. The main characters of the RL are the agent and the environment. The environment is the world where the agent lives and with which he interacts.
 
-![The agent, environment loop](images/agent_env_loop2.png){width=60%}
+```{r rl_loop, echo=FALSE, fig.align='center', out.width='70%'}
+knitr::include_graphics("images/agent_env_loop3.png")
+```
+
+## Deep Reinforcement Learning
+DRL combine the advantages of DL and RL for building AI systems. The main reason to use DL in RL is to leverage the scalability of DNN in high-dimensional space. @mnih2013playing prove this by training a DNN from raw pixels to play classic arcade games.
+
+<center>
+  <video data-autoplay src="videos/rl_atari_final.m4v" loop="loop" width="520" height="292"></video>
+</center>
+
 
 ## Problem Statement {#problem-statement}
 Humans can solve many activities that are presented to us in our daily life without much effort, e.g. move and throw objects, open doors or write. However, although these tasks may seem simple, they require a certain degree of dexterous, which we humans learn through experience.
 
-![](images/dexterous_manipulation.png){width=80%}
+```{r tasks, echo=FALSE, fig.align='center'}
+knitr::include_graphics("images/dexterous_manipulation.png")
+```
 
-##
+## Current approach
 Trying to solve *these activities* with a robot following traditional robot control approaches represents a big challenge, because it is necessary to solve complex dynamic models and consider many uncertainties in the process.
 
-![](images/model_based_task.png)
+```{r model_diagram, echo=FALSE, fig.align='center'}
+knitr::include_graphics("images/model_based_task.png")
+```
 
-##
-However, the latest advances in RL applied to robotic control have shown that it is possible to teach robots to solve this kind of tasks similarly to how a baby learn to walk; by trial and error.
+## DRL approach
+However, the latest advances in DRL applied to robotic control have shown that it is possible to teach robots to solve this kind of tasks by trial and error.
 
-![](images/drl_diagram.png)
+```{r drl_diagram, echo=FALSE, fig.align='center'}
+knitr::include_graphics("images/drl_diagram.png")
+```
 
-##
-This learning can be obtained directly on the physical robot, but this involves a couple of problems:
-
-1. Data sampling is very **inefficient** and it would take hundreds of hours to solve a task, in addition to the need to design an automatic system to restart the physical test environment or directly depend on human operators.
-
-2. And some Deep RL methods employ scanning mechanisms that could result in **dangerous** actions for the robot and the surrounding environment.
-
-##
-A very attractive alternative is gather all the data necessary for the training purely in simulation, and then deploy the learned control policy in a physical robot.
+## Where to get the data?
+We can gather all the data necessary for the training in simulation, and then deploy the learned control policy in a physical robot.
 
 <video data-autoplay src="videos/fetch_push.mp4" loop="loop" width="300" height="300"></video>
 <video data-autoplay src="videos/shadow_hand_block.mp4" loop="loop" width="300" height="300"></video>
 <video data-autoplay src="videos/humanoid.mp4" loop="loop" width="300" height="300"></video>
 
-##
-However, simulation environments do not represent the full complexity of the real world, and the policies learned in these virtual environments only perform well under conditions similar to those seen during the training phase. This disparity between virtual simulation environments and the real world is known as the *"reality gap"*.
+## Reality Gap
+However, simulation environments do **not represent** the full complexity of the real world, and the policies learned in these virtual environments only perform well under conditions similar to those seen during the training phase. This disparity between virtual simulation environments and the real world is known as the **reality gap**.
+
+```{r sim_to_real, echo=FALSE, fig.align='center'}
+knitr::include_graphics("images/sim_to_real.png")
+```
 
 
-##
-But, in the latest advances in Deep RL applied to robot control have shown [(Peng et al. 2018sim, Akkaya et al. 2019)](#ref) that it is possible to overcome this barrier using techniques that randomly modify the dynamics of the simulator during the training phase in order to expose the agent to a wide range of variations in the environment, this forces the agent to **learn to adapt** to the constant changes in the environment.
+## DR/ADR
+[@peng2018sim; @akkaya2019solving] shown that it is possible to overcome this barrier using techniques that **randomly modify the dynamics of the simulator** during the training phase in order to expose the agent to a wide range of variations in the environment, this forces the agent to **learn to adapt** to the constant changes in the environment.
 
-![](images/dr_crop.png){width=80%}
+```{r dr_hand, echo=FALSE, fig.align='center'}
+knitr::include_graphics("images/dr_crop.png")
+```
 
 ## Hypothesis {#hypothesis}
 
-> If we randomly modify the dynamics of a simulation environment in order to learn a robust control policy for solving a dexterous manipulation task, then it is possible to transfer this learned policy to a physical robot and solve the task without any fine-tuning.
+> If we randomly modify the dynamics of a simulation environment in order to learn a robust control policy for solving a dexterous manipulation task, then it is possible to transfer this learned policy to a physical robot and solve the task with little or any fine-tuning.
 
-## General objective {#objetives}
+## General objective {#objectives}
 The general objective of this thesis project is:
 
-Train an agent purely in simulation to solve a specific dexterous manipulation task using reinforcement learning algorithms and domain randomization techniques to transfer the learned policy in a physical robot
+* Train an agent in simulation to solve a specific dexterous manipulation task using reinforcement learning algorithms with domain randomization techniques and then transfer the learned policy to a physical robot.
 
 ## Specific objectives
 The following objectives emerge from the main objective of this research:
 
-1. Select a state-of-the-art simulator that meets the requirements of the selected task and reinforcement learning algorithms.
-2. Document me in the use of the selected robotics simulator and generate the virtual test environment for the selected task.
-3. Review of the state-of-the-art in reinforcement learning algorithms for robot control.
-
-##
-4. Implement one or more of the state-of-the-art RL algorithms for robot control to solve the selected task in the simulation environment (without domain randomization).
-5. Review of the state-of-the-art of domain randomization techniques.
-6. Implement state-of-the-art techniques in domain randomization and retrain the agent to solve the selected task.
-7. Transfer the policies learned in simulation (with and without domain randomization) to the physical robot and make a comparison of performance in the selected task.
-8. Communicate the results.
+```{r objetives, echo=FALSE}
+# Read in data
+df <- read.csv("thesis-activities.csv", stringsAsFactors = FALSE)
+# Convert to dates
+df$Start <- as.Date(df$Start, format = "%d/%m/%Y")
+# Create table
+knitr::kable(df, booktabs = TRUE)
+```
 
 ## Scientific contribution {#scientific-contribution}
-The main contribution of this work is to solve a dexterous manipulation task$^{*}$ with a redundant serial robot by training an agent purely in simulation.
+The main contribution of this work is to solve a dexterous manipulation task (*probably throwing objects, like balls, out of the robot's reach range*) with a redundant serial robot by training an agent in simulation.
+
+# Current progress {#progress}
+
+##
+I’m working on the first specific  objective “Review Deep RL literature”, for that, I’m actively reading the state-of-the-art papers and also the following RL/DRL books:
+
+```{r books, echo=FALSE, fig.align='center', out.width='100%'}
+knitr::include_graphics("images/rl_books_covers.png")
+```
+
+##
+In addition to the literature review work, I started taking two RL/ML courses:
+
+* OpenAI's [Spinning Up in Deep RL](https://spinningup.openai.com/en/latest/)
+
+```{r openai_course_logo, echo=FALSE, fig.align='center'}
+knitr::include_graphics("images/spinning-up-logo2.png")
+```
+
+* Google's [Machine Learning Crash Course](https://developers.google.com/machine-learning/crash-course)
+
+```{r google_course_logo, echo=FALSE, fig.align='center', out.width='50%'}
+knitr::include_graphics("images/google_ml_course.png")
+```
+
+##
+Also, I have made progress on my second objective "Select state-of-the art simulation". For my CAD course, I developed a project for path-planning in manufacturing process with robots on free-form surfaces, using one of the state-of-the-art robotics simulators (CoppeliaSim with PyRep ML toolkit).
+
+<center>
+  <video data-autoplay src="videos/pyrep_demo.m4v" loop="loop" width="800" height="450"></video>
+</center>
 
 # Chronogram of activities {#activities}
 
@@ -152,11 +225,10 @@ The main contribution of this work is to solve a dexterous manipulation task$^{*
 ```{r activities_chart, echo=FALSE, message=FALSE, warning=FALSE}
 library(plotly)
 
-# Read in data
-df <- read.csv("thesis-activities.csv", stringsAsFactors = FALSE)
-
-# Convert to dates
-df$Start <- as.Date(df$Start, format = "%d/%m/%Y")
+# # Read in data
+# df <- read.csv("thesis-activities.csv", stringsAsFactors = FALSE)
+# # Convert to dates
+# df$Start <- as.Date(df$Start, format = "%d/%m/%Y")
 
 # Choose colors based on number of resources
 cols <- RColorBrewer::brewer.pal(length(unique(df$Type)), name = "Set2")
@@ -202,46 +274,10 @@ fig
 # References {#references}
 
 ##
-
-1. Ilge Akkaya, Marcin Andrychowicz, Maciek Chociej, Mateusz Litwin, Bob McGrew, Arthur Petron, Alex
-Paino, Matthias Plappert, Glenn Powell, Raphael Ribas, et al. Solving rubik’s cube with a robot hand.
-arXiv preprint arXiv:1910.07113, 2019.
-
-2. OpenAI, Marcin Andrychowicz, Bowen Baker, Maciek Chociej, Rafal Jozefowicz, Bob McGrew, Jakub Pa-
-chocki, Arthur Petron, Matthias Plappert, Glenn Powell, Alex Ray, Jonas Schneider, Szymon Sidor, Josh
-Tobin, Peter Welinder, Lilian Weng, and Wojciech Zaremba. Learning dexterous in-hand manipulation, 2018.
-
-3. Wenbo Gao, Laura Graesser, Krzysztof Choromanski, Xingyou Song, Nevena Lazic, Pannag Sanketi,
-Vikas Sindhwani, and Navdeep Jaitly. Robotic table tennis with model-free reinforcement learning.
-arXiv preprint arXiv:2003.14398, 2020.
+<div id="refs" style="width: 1000px; height: 600px; overflow-y: scroll;"></div>
 
 ##
-
-4. Volodymyr Mnih, Koray Kavukcuoglu, David Silver, Alex Graves, Ioannis Antonoglou, Daan Wierstra,
-and Martin Riedmiller. Playing atari with deep reinforcement learning. arXiv preprint arXiv:1312.5602, 2013.
-
-5. OpenAI. Openai five. https://blog.openai.com/openai-five/, 2018.
-
-6. Xue Bin Peng, Marcin Andrychowicz, Wojciech Zaremba, and Pieter Abbeel. Sim-to-real transfer of
-robotic control with dynamics randomization. In 2018 IEEE international conference on robotics and
-automation (ICRA), pages 1–8. IEEE, 2018.
-
-7. David Silver, Thomas Hubert, Julian Schrittwieser, Ioannis Antonoglou, Matthew Lai, Arthur Guez,
-Marc Lanctot, Laurent Sifre, Dharshan Kumaran, Thore Graepel, et al. Mastering chess and shogi by
-self-play with a general reinforcement learning algorithm. arXiv preprint arXiv:1712.01815, 2017.
-
-##
-
-8. Xingyou Song, Yuxiang Yang, Krzysztof Choromanski, Ken Caluwaerts, Wenbo Gao, Chelsea Finn, and
-Jie Tan. Rapidly adaptable legged robots via evolutionary meta-learning. arXiv preprint arXiv:2003.01239, 2020.
-
-9. Jie Tan, Tingnan Zhang, Erwin Coumans, Atil Iscen, Yunfei Bai, Danijar Hafner, Steven Bohez, and
-Vincent Vanhoucke. Sim-to-real: Learning agile locomotion for quadruped robots. arXiv preprint
-arXiv:1804.10332, 2018.
-
-10. Josh Tobin, Rachel Fong, Alex Ray, Jonas Schneider, Wojciech Zaremba, and Pieter Abbeel. Domain
-randomization for transferring deep neural networks from simulation to the real world. In 2017 IEEE/RSJ
-International Conference on Intelligent Robots and Systems (IROS), pages 23–30. IEEE, 2017.
-
-11. Andy Zeng, Shuran Song, Johnny Lee, Alberto Rodriguez, and Thomas Funkhouser. Tossingbot:
-Learning to throw arbitrary objects with residual physics. IEEE Transactions on Robotics, 2020.
+<br>
+<center>
+  <h1>Thank you for your attention ☕</h1>
+</center>
