@@ -3,16 +3,15 @@
 <head>
   <meta charset="utf-8">
   <meta name="generator" content="pandoc">
-  <meta name="author" content="Luis Castillo" />
   <title>Learning Dexterous Manipulation with Model-Free Deep Reinforcement Learning</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
-  <link rel="stylesheet" href="slides_files/reveal.js-3.3.0.1/css/reveal.css"/>
+  <link rel="stylesheet" href="thesis-slides-temp_files/reveal.js-3.3.0.1/css/reveal.css"/>
 
 
 
-<link rel="stylesheet" href="slides_files/reveal.js-3.3.0.1/css/theme/white.css" id="theme">
+<link rel="stylesheet" href="thesis-slides-temp_files/reveal.js-3.3.0.1/css/theme/white.css" id="theme">
 
 
   <!-- some tweaks to reveal css -->
@@ -444,14 +443,16 @@ style.innerHTML = style_script;
 document.getElementsByTagName('head')[0].appendChild(style);
 </script>
 
-    <script src="slides_files/htmlwidgets-1.5.1/htmlwidgets.js"></script>
-    <script src="slides_files/plotly-binding-4.9.2.1/plotly.js"></script>
-    <script src="slides_files/typedarray-0.1/typedarray.min.js"></script>
-    <script src="slides_files/jquery-1.11.3/jquery.min.js"></script>
-    <link href="slides_files/crosstalk-1.1.0.1/css/crosstalk.css" rel="stylesheet" />
-    <script src="slides_files/crosstalk-1.1.0.1/js/crosstalk.min.js"></script>
-    <link href="slides_files/plotly-htmlwidgets-css-1.52.2/plotly-htmlwidgets.css" rel="stylesheet" />
-    <script src="slides_files/plotly-main-1.52.2/plotly-latest.min.js"></script>
+    <script src="thesis-slides-temp_files/kePrint-0.0.1/kePrint.js"></script>
+    <link href="thesis-slides-temp_files/lightable-0.0.1/lightable.css" rel="stylesheet" />
+    <script src="thesis-slides-temp_files/htmlwidgets-1.5.1/htmlwidgets.js"></script>
+    <script src="thesis-slides-temp_files/plotly-binding-4.9.2.1/plotly.js"></script>
+    <script src="thesis-slides-temp_files/typedarray-0.1/typedarray.min.js"></script>
+    <script src="thesis-slides-temp_files/jquery-1.11.3/jquery.min.js"></script>
+    <link href="thesis-slides-temp_files/crosstalk-1.1.0.1/css/crosstalk.css" rel="stylesheet" />
+    <script src="thesis-slides-temp_files/crosstalk-1.1.0.1/js/crosstalk.min.js"></script>
+    <link href="thesis-slides-temp_files/plotly-htmlwidgets-css-1.52.2/plotly-htmlwidgets.css" rel="stylesheet" />
+    <script src="thesis-slides-temp_files/plotly-main-1.52.2/plotly-latest.min.js"></script>
 </head>
 <body>
   <div class="reveal">
@@ -459,175 +460,703 @@ document.getElementsByTagName('head')[0].appendChild(style);
 
 <section>
     <h1 class="title">Learning Dexterous Manipulation with Model-Free Deep Reinforcement Learning</h1>
-    <h2 class="author">Luis Castillo</h2>
+  <h1 class="subtitle">Thesis Advance II</h1>
+    <h2 class="author"><div class="line-block"><small>Thesis Director: Ph.D. Reyes Ríos Cabrera</small><br />
+<small>Author: Luis Castillo</small></div></h2>
 </section>
 
 <section id="presentation-outline" class="slide level2">
 <h2>Presentation outline</h2>
 <ul>
-<li><a href="#/introduction">Introduction</a></li>
-<li><a href="#/state-of-the-art">State-of-the-art</a></li>
-<li><a href="#/proposal-description">Proposal Description</a>
+<li><a href="#/pg">Policy Gradient Algorithms</a>
 <ul>
-<li><a href="#/motivation">Motivation</a></li>
-<li><a href="#/background">Background</a></li>
-<li><a href="#/problem-statement">Problem Statement</a></li>
-<li><a href="#/hypothesis">Hypothesis</a></li>
-<li><a href="#/objectives">Objectives</a></li>
-<li><a href="#/scientific-contribution">Scientific Contribution</a></li>
+<li><a href="#/vpg">REINFORCE: Vanilla Policy Gradient</a></li>
+<li><a href="#/ac">Actor-Critic</a>
+<ul>
+<li><a href="#/a2c">Synchronous Advance Actor-Critic</a></li>
+<li><a href="#/a3c">Asynchronous Advance Actor-Critic</a></li>
 </ul></li>
-<li><a href="#/activities">Chronogram of activities</a></li>
-<li><a href="#/references">References</a></li>
+<li><a href="#/trpo">Trust Region Policy Optimization</a></li>
+<li><a href="#/ppo">Proximal Policy Optimization</a></li>
+<li><a href="#/acktr">Actor Critic Using Kronecker-Factored Trust Region</a></li>
+</ul></li>
+<li><a href="#/review">Project Review</a></li>
+<li><a href="#/strategy">Project Strategy</a></li>
+<li><a href="#/status">Project Status</a></li>
+<li><a href="#/refs">References</a></li>
 </ul>
 </section>
-<section><section id="introduction" class="title-slide slide level1"><h1>Introduction</h1></section><section id="section" class="slide level2">
+<section id="rl-algorithms" class="slide level2">
+<h2>RL Algorithms</h2>
+<p><img src="images/rl_landscape.png" width="80%" style="display: block; margin: auto;" /></p>
+</section>
+<section><section id="pg" class="title-slide slide level1"><h1>Policy Gradient Algorithms</h1></section><section id="vpg" class="slide level2">
+<h2>REINFORCE: Vanilla Policy Gradient (VPG)</h2>
+<p>This algorithm follows the simple idea of performing gradient ascent on the parameters of the <span class="math inline">\(\theta\)</span> policy to gradually improve the performance of the <span class="math inline">\(\pi_theta\)</span> policy</p>
+<p><span class="math display">\[
+\begin{aligned}
+\nabla_{\theta} J\left(\pi_{\theta}\right) &amp;=\mathrm{E}_{\tau \sim \pi_{\theta}}\left[\sum_{t=0}^{T} \nabla_{\theta} \log \pi_{\theta}\left(a_{t} \mid s_{t}\right) \sum_{t^{\prime}=t}^{T} R_{t^{\prime}}\right] \\
+&amp;= \mathrm{E}_{\tau \sim \pi_{\theta}}\left[\sum_{t=0}^{T} \nabla_{\theta} \log \pi_{\theta}\left(a_{t} \mid s_{t}\right) Q(a_{t}, s_{t})\right]
+\end{aligned}
+\]</span></p>
+<p>One interpretation of VPG is to weight the gradient by the cumulative reward of each action, encouraging the agent to take the action <span class="math inline">\(a_i\)</span> that has greater cumulative reward.</p>
+</section><section id="section" class="slide level2">
 <h2></h2>
-<p><strong>Deep Reinforcement Learning</strong> (Deep RL) methods have great potential in real-world application. They have recently shown that it can solve tasks with superior human performance in some scenarios, e.g. classic Atari games <a href="#/ref">(Mnih et al. 2013)</a>, massive online multiplayer games <a href="#/ref">(OpenAI 2018)</a>, or complicated board games <a href="#/ref">(Silver et al. 2017)</a>.</p>
-<video data-autoplay src="videos/alphazero_2017_final.m4v" loop="loop" width="460" height="258">
-</video>
-<video data-autoplay src="videos/openai_five_dota_final.m4v" loop="loop" width="460" height="258">
-</video>
+<p>The policy gradient can be extended to the infinite horizon by adding the discount factor <span class="math inline">\(\gamma\)</span>. This, in order to reduce the high variance in the gradient estimation</p>
+<p><span class="math display">\[
+\nabla J(\theta)=\mathrm{E}_{\tau \sim \pi_{\theta}}\left[\sum_{t=0}^{\infty} \nabla_{\theta} \log \pi_{\theta}\left(a_{t} \mid s_{t}\right) \gamma^{t} \sum_{t^{\prime}=t}^{\infty} \gamma^{t^{\prime}-t} R_{t^{\prime}}\right]
+\]</span></p>
+<p>Another way to reduce high variance problems is to add a baseline <span class="math inline">\(b(s_t)\)</span> function that only depends on the state <span class="math inline">\(s_t\)</span></p>
+<p><span class="math display">\[
+\nabla J(\theta)=\mathrm{E}_{\tau \sim \pi_{\theta}}\left[\sum_{t=0}^{\infty} \nabla_{\theta} \log \pi_{\theta}\left(a_{t} \mid s_{t}\right)\left(\sum_{t^{\prime}=t}^{\infty} \gamma^{t^{\prime}-t} R_{t^{\prime}}-b\left(s_{t}\right)\right)\right]
+\]</span></p>
+<p><strong>Note</strong>: One common choice of <span class="math inline">\(b(s_t)\)</span> is its estimated state value <span class="math inline">\(V(s_t)\)</span></p>
+</section><section id="ac" class="slide level2">
+<h2>Actor-Critic (AC)</h2>
+<p>The <em>actor-critic</em> method follows the idea of training together an <strong>actor</strong>, the policy function <span class="math inline">\(\pi(a|s)\)</span>, and the <strong>critic</strong>, the value function <span class="math inline">\(V^{\pi}(s)\)</span>. Like some VPG implementations, AC uses a variant of the <em>TD error</em> called <em>L-step TD error</em>.</p>
+<div class="figure" style="text-align: center">
+<img src="images/ac_vs_gan.png" alt="Relationship between Actor-Critic (AC) and Generative Adversarial Network (GAN). Black lines are analogous connections between architectures, while green lines are dependent."  />
+<p class="caption">
+Relationship between Actor-Critic (AC) and Generative Adversarial Network (GAN). Black lines are analogous connections between architectures, while green lines are dependent.
+</p>
+</div>
+</section><section id="the-critic" class="slide level2">
+<h2>The critic</h2>
+<p>The <strong>critic</strong>, <span class="math inline">\(V_{\psi}^{\pi}\)</span>, is optimized by minimizing the square of the L-step error:</p>
+<p><span class="math display">\[
+\psi=\psi-\eta_{\psi} \nabla J_{V_{\psi}^{\pi_{\theta}}}(\psi)\\
+\]</span></p>
+<p>where <span class="math inline">\(\eta_{\psi}\)</span> is the step size and the function of the L-step error is</p>
+<p><span class="math display">\[
+J_{V_{\psi}}^{\pi_{\theta}}(\psi) = \frac{1}{2}\left(\sum_{t=i}^{i+L-1} \gamma^{t-i} r_t + \gamma^{L} V_{\psi}^{\pi_{\theta}}(s&#39;)-V_{\psi}^{\pi_{\theta}}(s_i)\right)^{2}\\
+\]</span></p>
+<p>where <span class="math inline">\(s&#39;\)</span> is the next state after <span class="math inline">\(L\)</span> steps following the policy <span class="math inline">\(\pi_{\theta}\)</span>.</p>
 </section><section id="section-1" class="slide level2">
 <h2></h2>
-<p>Deep RL algorithms can be used to learn to control physical robots in real-time <a href="#/ref">(Gao et al. 2020)</a>. Deep RL agents learn to solve a given task by interacting with an unknown, unstructured environment. Due to its simple and intuitive fundamentals and its great potential to solve complex problems, Deep RL has become one of the most appealing branches of artificial intelligence.</p>
-<video data-autoplay src="videos/dxl-tracker-trpo.m4v" loop="loop" width="280" height="157">
-</video>
-<video data-autoplay src="videos/create-docker-trpo.m4v" loop="loop" width="280" height="157">
-</video>
-<video data-autoplay src="videos/ur-reacher-6-trpo.m4v" loop="loop" width="280" height="157">
-</video>
-</section></section>
-<section><section id="state-of-the-art" class="title-slide slide level1"><h1>State of the art</h1></section><section id="section-2" class="slide level2">
+<p>And the gradient <span class="math inline">\(\nabla J_{V_{\psi}}(\psi)\)</span> is</p>
+<p><span class="math display">\[
+\nabla J_{V_{\psi}^{\pi_{\theta}}}(\psi)=\left(V_{\psi}^{\pi \theta}\left(S_{i}\right)-\sum_{t=i}^{i+L-1} \gamma^{t-i} R_{t}-\gamma^{L} V_{\psi}^{\pi \theta}\left(S^{\prime}\right)\right) \nabla V_{\psi}^{\pi \theta}\left(S_{i}\right)
+\]</span></p>
+</section><section id="the-actor" class="slide level2">
+<h2>The actor</h2>
+<p>Similarly the <strong>actor</strong>, <span class="math inline">\(\pi_{\theta}(\cdot)\)</span>, takes the state <span class="math inline">\(s\)</span> as input and the output is the policy or action. To update this function, similar to the VPG algorithm, the gradient ascent is used</p>
+<p><span class="math display">\[
+\theta = \theta + \eta_{\theta} \nabla J_{\pi_{\theta}}(\theta)\\
+\]</span></p>
+<p>where <span class="math inline">\(\eta_{\theta}\)</span> is the step size and the gradient <span class="math inline">\(\nabla J_{\pi_{\theta}}(\theta)\)</span> is</p>
+<p><span class="math display">\[
+\nabla J(\theta)=\mathbb{E}_{\tau, \theta}\left[\sum_{i=0}^{\infty} \nabla \log \pi_{\theta}\left(A_{i} \mid S_{i}\right)\left(\sum_{t=i}^{i+L-1} \gamma^{t-i} R_{t}+\gamma^{L} V_{\psi}^{\pi \theta}\left(S^{\prime}\right)-V_{\psi}^{\pi_{\theta}}\left(S_{i}\right)\right)\right]
+\]</span></p>
+</section><section id="note-about-ac" class="slide level2">
+<h2>Note about AC</h2>
+<p>It should be noted that the parameters of the actor <span class="math inline">\((\theta)\)</span> and the critic <span class="math inline">\((\psi)\)</span> are not necessarily different, in practice some authors share the lower layers of both networks as a representation of the state. Furthermore, in practice <span class="math inline">\(L\)</span> is used with a value of 1, which gives us a TD(1) estimate.</p>
+</section><section id="a2c" class="slide level2">
+<h2>Synchronous Advance Actor-Critic (A2C)</h2>
+<p>A2C is similar to the AC algorithm, but is focused on parallel training. In this architecture there is a master node in charge of updating the model of the actor and the critic, while the working nodes are in charge of generating the experience with the interaction with the environment</p>
+<!-- Each worker has a copy of the global actor and critic and uses them to interact with the environment, sampling actions using the policy, and then estimating the gradients of the target function for each model. Once the master node receives all the gradients, in a synchronous way, it uses them to update the parameters, and update the global actor and critics. -->
+<div class="figure" style="text-align: center">
+<img src="images/ac2_diagram.png" alt="Schematic diagram of A2C architecture" width="65%" />
+<p class="caption">
+Schematic diagram of A2C architecture
+</p>
+</div>
+</section><section id="a3c" class="slide level2">
+<h2>Asynchronous Advance Actor-Critic (A3C)</h2>
+<p>A3C is just an asynchronous version of A2C. This means that the master node no longer waits for all workers to report to it to update the parameters of the models <span class="math inline">\((\pi_{\theta}, V_{\psi})\)</span>, but rather, the update takes place every time a worker reports the calculation of new gradients, this makes the computational efficiency better compared to A2C</p>
+<div class="figure" style="text-align: center">
+<img src="images/ac2_vs_ac3.png" alt="Comparative between A2C and A3C architectures"  />
+<p class="caption">
+Comparative between A2C and A3C architectures
+</p>
+</div>
+</section><section id="pg-problems-12-step-size-pitfall" class="slide level2">
+<h2>PG Problems (1/2): Step size pitfall</h2>
+<p>Both VP and AC use stochastic gradient descent (SGD), which makes them susceptible to <strong>performance collapse</strong> if the step size <span class="math inline">\(\eta_{\theta}\)</span> is too large.</p>
+<p>This happens because the gradient <span class="math inline">\(\nabla J(\theta)\)</span> only provides <strong>first-order information</strong> of the current <span class="math inline">\(\theta\)</span> parameters. Ignoring completely the <strong>curvature</strong> that has the reward history obtained.</p>
+<p>But, if the step size <span class="math inline">\(\eta_\theta\)</span> is too small, learning can become very conservative and make no progress in training.</p>
+</section><section id="pg-problems-22-parametric-space-vs.-policy-space" class="slide level2">
+<h2>PG Problems (2/2): Parametric space vs. Policy space</h2>
+<p>Another limitation of VPO and Actor-critic is that they operate in the parametric space rather than the political space</p>
+<p><span class="math display">\[
+\Pi = \left\{ \pi | \pi \geq 0, \, \int \pi = 1 \right\}\\
+\]</span></p>
+<p>This makes it more difficult to adjust the parameter of step size <span class="math inline">\(\eta_{\theta}\)</span> because a small change in the parametric space <span class="math inline">\(\theta\)</span> can mean a very <strong>abrupt change</strong> in the policy <span class="math inline">\(\pi_{\theta}\)</span>.</p>
+</section><section id="trpo" class="slide level2">
+<h2>Trust Region Policy Optimization (TRPO)</h2>
+<p>TRPO solves the problem of step size, while maintaining control of variance between learned policies and also operating in the policy space.</p>
+<p>To achieve this, TRPO performs the update of parameters of the policy <span class="math inline">\(\pi_\theta\)</span> solving the following optimization problem:</p>
+<p><span class="math display">\[
+\begin{aligned}
+\max_{\pi_{\theta}} &amp;\; \mathcal{L}(\pi_{\theta}&#39;) \\
+\text{ s.t. } &amp;\; \mathrm{E}_{s \sim \rho_{\pi_{\theta}}} \left[ D_{KL}(\pi_{\theta} \| \pi_{\theta}&#39;) \right] \leq \delta
+\end{aligned}\\
+\]</span></p>
+<p>where <span class="math inline">\(D_{KL}(\pi_{\theta} \| \pi_{\theta}&#39;)\)</span> is the KL-divergence, a measure of relative entropy between the old and new policy <span class="math inline">\((\pi_{\theta}, \pi_{\theta}&#39;)\)</span>, and <span class="math inline">\(\mathcal{L}(\pi_{\theta}&#39;)\)</span> is the surrogate advantage, a performance metric between policies.</p>
+</section><section id="section-2" class="slide level2">
 <h2></h2>
-<ul>
-<li><p><a href="#/ref">(Peng et al. 2018)</a> propose to use dynamics randomization to train recurrent policies in simulation, and deploy the learned policies directly on a physical robot, achieving good performance on an object pushing task, without calibration.</p></li>
-<li><p><a href="#/ref">(OpenAI et al. 2018)</a> proposes to learn dexterous manipulation with a five finger articulated hand, using Proximal Policy Optimization (PPO), with dynamic randomization (DR) in the simulation, achieving very good results in the physical system.</p></li>
-<li><p><a href="#/ref1">(Akkaya et al. 2019)</a> proposes a new algorithm to modify the dynamics of the simulator automatically called Automatic Domain Randomization (ADR), substantially improving the results obtained with DR. This is demonstrated by solving the Rubik’s cube with a robotic hand.</p></li>
-</ul>
-<!-- TODO: add the tossing bot paper -->
-</section></section>
-<section><section id="proposal-description" class="title-slide slide level1"><h1>Proposal description</h1></section><section id="motivation" class="slide level2">
-<h2>Motivation</h2>
-<p>In most cases, the dynamic process of <strong>robotic control</strong> can be approximated as a <strong>Markov Decision Process</strong> (MDP) making it an ideal field to experiment with Deep RL algorithms.</p>
-<p>In addition, recently, large technology companies and prestigious research centers have focused their research in this area, such as OpenAI, who solved the Rubik’s cube with a five-finger articulated robotic hand completely in simulation.</p>
-<video data-autoplay src="videos/shadow_rubik_normal.m4v" loop="loop" width="460" height="258">
-</video>
-<video data-autoplay src="videos/shadow_rubik_oclution.m4v" loop="loop" width="460" height="258">
-</video>
+<p>The surrogate advantage is</p>
+<p><span class="math display">\[
+\mathcal{L}(\pi_{\theta}&#39;) = \mathrm{E}_{\tau \sim \pi_{\theta}}\left[\sum_{t=0}^{\infty} \gamma^{t} \frac{\pi_{\theta}^{\prime}\left(a_{t} \mid s_{t}\right)}{\pi_{\theta}\left(a_{t} \mid s_{t}\right)} A^{\pi_{\theta}}\left(s_{t}, a_{t}\right)\right] \\
+\]</span></p>
+<p>And the gradient</p>
+<p><span class="math display">\[
+g = \nabla_{\theta} \mathcal{L}(\pi_{\theta}&#39;) = \mathrm{E}_{\tau \sim \pi_{\theta}}\left[\left.\sum_{t=0}^{\infty} \gamma^{t} \nabla_{\theta} \log \pi_{\theta}\left(A_{t} \mid S_{t}\right)\right|_{\theta} A^{\pi_{\theta}}\left(S_{t}, A_{t}\right)\right]
+\]</span></p>
 </section><section id="section-3" class="slide level2">
 <h2></h2>
-<p>Training in simulation and then transferring learned policy to physical systems (i.e <strong>sim-to-real</strong>) or using expert human demonstrations are two approaches that satisfy satisfying and computational and safety requirements in robot learning tasks. Furthermore, robot simulators have been widely developed for decades, e.g. CoppeliaSim, MuJoCo, Gazebo and Pybullet.</p>
-<video data-autoplay src="videos/shadow_hand_block.mp4" loop="loop" width="292" height="292">
-</video>
-<video data-autoplay src="videos/shadow_hand_real_block_final.m4v" loop="loop" width="520" height="292">
-</video>
-</section><section id="background" class="slide level2">
-<h2>Background</h2>
-<p>Machine learning (ML) is the field of AI that studies the process of learning from data to make predictions and/or decisions. It is generally categorized into supervised, unsupervised and reinforcement learning.</p>
-<p><img data-src="images/mrl_classification.png" alt="Machine Learning classification" style="width:50.0%" /></p>
-</section><section id="reinforcement-learning" class="slide level2">
-<h2>Reinforcement learning</h2>
-<p>Reinforcement Learning (RL) is a subfield of ML that address the problem of automatic learning for optimal decisions over time. The main characters of the RL are the agent and the environment. The environment is the world where the agent lives and with which he interacts.</p>
-<p><img data-src="images/agent_env_loop2.png" alt="The agent, environment loop" style="width:60.0%" /></p>
-</section><section id="problem-statement" class="slide level2">
-<h2>Problem Statement</h2>
-<p>Humans can solve many activities that are presented to us in our daily life without much effort, e.g. move and throw objects, open doors or write. However, although these tasks may seem simple, they require a certain degree of dexterous, which we humans learn through experience.</p>
-<p><img data-src="images/dexterous_manipulation.png" style="width:80.0%" /></p>
+<p>Using Taylor’s expansion, we can approximate</p>
+<p><span class="math display">\[
+\begin{aligned}
+\mathcal{L}(\pi_{\theta}&#39;) &amp; \approx g^{T}\left(\theta&#39;-\theta\right) \\
+\bar{D}_{K L}\left(\theta&#39; \| \theta\right) &amp; \approx \frac{1}{2}\left(\theta&#39; -\theta\right)^{T} H\left(\theta&#39;-\theta\right)
+\end{aligned}\\
+\]</span></p>
+<p>where <span class="math inline">\(H\)</span> is the Hessian of <span class="math inline">\(\mathrm{E}_{s \sim \rho_{\pi_{\theta}}} \left[ D_{KL}(\pi_{\theta} \| \pi_{\theta}&#39;) \right]\)</span></p>
 </section><section id="section-4" class="slide level2">
 <h2></h2>
-<p>Trying to solve <em>these activities</em> with a robot following traditional robot control approaches represents a big challenge, because it is necessary to solve complex dynamic models and consider many uncertainties in the process.</p>
-<p><img data-src="images/model_based_task.png" /></p>
+<p>Thus, the optimization problem is reduced to</p>
+<p><span class="math display">\[
+\begin{aligned}
+\theta&#39; &amp;= \arg \max \; g^{T}(\theta&#39;-\theta) \\ \\
+&amp; \text{ s.t. } \; \frac{1}{2} (\theta&#39; - \theta)^{T} \, H(\theta&#39;-\theta) \leq \delta
+\end{aligned}\\
+\]</span></p>
+<p>which has an analytical solution (with the method of the Lagrangian duality)</p>
+<p><span class="math display">\[
+\theta&#39;=\theta+\sqrt{\frac{2 \delta}{g^{T} H^{-1} g}} H^{-1} g\\
+\]</span></p>
 </section><section id="section-5" class="slide level2">
 <h2></h2>
-<p>However, the latest advances in RL applied to robotic control have shown that it is possible to teach robots to solve this kind of tasks similarly to how a baby learn to walk; by trial and error.</p>
-<p><img data-src="images/drl_diagram.png" /></p>
+<p>By doing this, TRPO would be calculating the Natural Gradient (NG). But, because of the errors induced by the approximations, this solution may not satisfy the KL-divergence restriction. To solve that, TRPO uses line search</p>
+<p><span class="math display">\[
+\theta&#39;=\theta+\alpha^{j} \sqrt{\frac{2 \delta}{g^{T} H^{-1} g}} H^{-1} g\\
+\]</span></p>
+<p><strong>Note</strong>: Because of the costo of computing <span class="math inline">\(H^{-1}\)</span>, TRPO uses the conjugate gradient method to solve <span class="math inline">\(Hx = g\)</span> for <span class="math inline">\(x = H^{-1}g\)</span>.</p>
+<p><span class="math display">\[
+H x=\nabla_{\theta}\left(\left(\nabla_{\theta} \bar{D}_{K L}\left(\theta \| \theta_{k}\right)\right)^{T} x\right)\\
+\]</span></p>
+</section><section id="ppo" class="slide level2">
+<h2>Proximal Policy Optimization (PPO)</h2>
+<ul>
+<li><p>PPO, like TRPO, takes the greatest possible step without causing policy performance collapse</p></li>
+<li><p>But, while TRPO uses second order information, the PPO only uses first order information, which brings performance improvements and simplifies implementation.</p></li>
+<li><p>There are mainly two variants of PPO:</p>
+<ul>
+<li>PPO-Penalty</li>
+<li>PPO-Clip</li>
+</ul></li>
+</ul>
+</section><section id="ppo-penalty" class="slide level2">
+<h2>PPO-Penalty</h2>
+<p>Instead of solving an optimization problem with constraints, as TRPO does, PPO-Penalty solves a regularization problem</p>
+<p><span class="math display">\[
+\max_{\pi_{\theta}&#39;} \; \mathcal{L}(\pi_{\theta}&#39;) - \lambda \, \mathrm{E}_{s \sim \rho_{\pi_{\theta}}} \left[ D_{KL}(\pi_{\theta} \| \pi_{\theta}&#39;) \right]
+\]</span></p>
+<p>where <span class="math inline">\(\lambda\)</span> is the adjustment coefficient, this parameter is adjusted based on the KL-divergence during training.</p>
+</section><section id="ppo-clip" class="slide level2">
+<h2>PPO-Clip</h2>
+<p>PPO-Penalty does not contain the KL-divergence term. It directly clips on the reason for change between policies <span class="math inline">\(\ell(\theta&#39;)\)</span></p>
+<p><span class="math display">\[
+\mathcal{L}(\pi_{\theta}&#39;) = \mathrm{E}_{\pi_{\theta}} \left[ \min \left( \ell_{t}(\theta&#39;) A^{\pi_{\theta}}(s_t, a_t), \, \text{clip}(\ell_{t}(\theta&#39;), 1 - \epsilon, 1 + \epsilon) A^{\pi_{\theta}}(s_t, a_t) \right) \right] \\
+\]</span></p>
+<p>whit</p>
+<p><span class="math display">\[
+\ell_t(\theta&#39;) = \frac{\pi_{\theta}&#39;(a_t, s_t)}{\pi_{\theta}(a_t, s_t)} \\
+\]</span></p>
+<p>and</p>
+<p><span class="math display">\[
+\text{clip}(x, \min, \max) = \left\{ \begin{array}{lc} \text{if } x &gt; \max &amp; \max \\
+\text{if } x &lt; \min &amp; \min \\ \text{otherwise} &amp; x\end{array} \right.
+\]</span></p>
+</section><section id="acktr" class="slide level2">
+<h2>Actor Critic Using Kronecker-Factored Trust Region (ACKTR)</h2>
+<ul>
+<li><p>ACKTR is another alternative to TRPO. Its main idea is to use K-FAC, a very efficient second-order optimization method for calculating natural gradient descent (NGD).</p></li>
+<li><p>While TRPO approximates the inverse of the Hessian <span class="math inline">\(H^{-1}\)</span> with the conjugate gradient <span class="math inline">\(H^{-1}g\)</span>, ACKTR approximates it with a diagonal block matrix, where each block corresponds to Fisher Information Matrix (FIM) of each layer in the model.</p></li>
+</ul>
+</section><section id="k-fac" class="slide level2">
+<h2>K-FAC</h2>
+<div class="figure" style="text-align: center">
+<img src="images/kfac_approximation.png" alt="FIM aproximation using K-FAC"  />
+<p class="caption">
+FIM aproximation using K-FAC
+</p>
+</div>
 </section><section id="section-6" class="slide level2">
 <h2></h2>
-<p>This learning can be obtained directly on the physical robot, but this involves a couple of problems:</p>
-<ol type="1">
-<li><p>Data sampling is very <strong>inefficient</strong> and it would take hundreds of hours to solve a task, in addition to the need to design an automatic system to restart the physical test environment or directly depend on human operators.</p></li>
-<li><p>And some Deep RL methods employ scanning mechanisms that could result in <strong>dangerous</strong> actions for the robot and the surrounding environment.</p></li>
-</ol>
+<p>For each layer <span class="math inline">\(\ell\)</span>, with output <span class="math inline">\(x_{\text{out}} = W_{\ell} \, x_{\text{in}}\)</span> and <span class="math inline">\(W_{\ell}\)</span> a matrix of dimensions <span class="math inline">\(d_{\text{in}} \times d_{\text{in}}\)</span>. The idea is to use Kronecker’s factorization to calculate the gradient <span class="math inline">\(\nabla_{W_{\ell}}\)</span> with the product of <span class="math inline">\((\nabla_{x_{\text{out}}L)x_{\text{in}}}\)</span></p>
+<p><span class="math display">\[
+\left(\nabla_{\theta} \log \pi_{\theta}(a \mid s)\right)\left(\nabla_{\theta} \log \pi_{\theta}(a \mid s)\right)^{\top}=x_{\text {in }} x_{\text {in }}^{\top} \otimes\left(\nabla_{x_{\text {out }}} L\right)\left(\nabla_{x_{\text {out }}} L\right)^{\top}
+\]</span></p>
+<p>where <span class="math inline">\(\otimes\)</span> denotes Kronecker product.</p>
 </section><section id="section-7" class="slide level2">
 <h2></h2>
-<p>A very attractive alternative is gather all the data necessary for the training purely in simulation, and then deploy the learned control policy in a physical robot.</p>
-<video data-autoplay src="videos/fetch_push.mp4" loop="loop" width="300" height="300">
-</video>
-<video data-autoplay src="videos/shadow_hand_block.mp4" loop="loop" width="300" height="300">
-</video>
-<video data-autoplay src="videos/humanoid.mp4" loop="loop" width="300" height="300">
-</video>
-</section><section id="section-8" class="slide level2">
-<h2></h2>
-<p>However, simulation environments do not represent the full complexity of the real world, and the policies learned in these virtual environments only perform well under conditions similar to those seen during the training phase. This disparity between virtual simulation environments and the real world is known as the <em>“reality gap”</em>.</p>
-</section><section id="section-9" class="slide level2">
-<h2></h2>
-<p>But, in the latest advances in Deep RL applied to robot control have shown <a href="#/ref">(Peng et al. 2018sim, Akkaya et al. 2019)</a> that it is possible to overcome this barrier using techniques that randomly modify the dynamics of the simulator during the training phase in order to expose the agent to a wide range of variations in the environment, this forces the agent to <strong>learn to adapt</strong> to the constant changes in the environment.</p>
-<p><img data-src="images/dr_crop.png" style="width:80.0%" /></p>
-</section><section id="hypothesis" class="slide level2">
+<p>In this way To approach <span class="math inline">\(H^{-1}\)</span> as</p>
+<p><span class="math display">\[
+\begin{aligned}
+H^{-1} =&amp;\left(\left(\nabla_{\theta} \log \pi_{\theta}(a \mid s)\right)\left(\nabla_{\theta} \log \pi_{\theta}(a \mid s)\right)^{\top}\right)^{-1} \\
+=&amp;\left(x_{\text {in }} x_{\text {in }}^{\top} \otimes\left(\nabla_{x_{\text {out }}} L\right)\left(\nabla_{x_{\text {out }}} L\right)^{\top}\right)^{-1} \\
+=&amp;\left[\left(x_{\text {in }} x_{\text {in }}^{\top}\right)^{-1} \otimes\left(\left(\nabla_{x_{\text {out }}} L\right)\left(\nabla_{x_{\text {out }}} L\right)^{\top}\right)^{-1}\right]
+\end{aligned}\\
+\]</span></p>
+<p>With this, instead of inverting a matrix of <span class="math inline">\((d_{\text{in}}^3 d_{\text{out}}) \times (d_{\text{in}} d_{\text{out}})\)</span>, the result can be approximated by the inversion of two matrices of dimensions <span class="math inline">\(d_{\text{in}}^3 \times d_{\text{in}}^3\)</span> and <span class="math inline">\(d_{\text{out}}^3 \times d_{\text{out}}^3\)</span>.</p>
+</section></section>
+<section><section id="review" class="title-slide slide level1"><h1>Project review</h1></section><section id="hypothesis" class="slide level2">
 <h2>Hypothesis</h2>
 <blockquote>
-<p>If we randomly modify the dynamics of a simulation environment in order to learn a robust control policy for solving a dexterous manipulation task, then it is possible to transfer this learned policy to a physical robot and solve the task without any fine-tuning.</p>
+<p>If we randomly modify the dynamics of a simulation environment in order to learn a robust control policy for solving a dexterous manipulation task, then it is possible to transfer this learned policy to a physical robot and solve the task with little or any fine-tuning.</p>
 </blockquote>
-</section><section id="objetives" class="slide level2">
+</section><section id="objectives" class="slide level2">
 <h2>General objective</h2>
 <p>The general objective of this thesis project is:</p>
-<p>Train an agent purely in simulation to solve a specific dexterous manipulation task using reinforcement learning algorithms and domain randomization techniques to transfer the learned policy in a physical robot</p>
+<ul>
+<li>Train an agent in simulation to solve a specific dexterous manipulation task using reinforcement learning algorithms with domain randomization techniques and then transfer the learned policy to a physical robot.</li>
+</ul>
 </section><section id="specific-objectives" class="slide level2">
 <h2>Specific objectives</h2>
 <p>The following objectives emerge from the main objective of this research:</p>
-<ol type="1">
-<li>Select a state-of-the-art simulator that meets the requirements of the selected task and reinforcement learning algorithms.</li>
-<li>Document me in the use of the selected robotics simulator and generate the virtual test environment for the selected task.</li>
-<li>Review of the state-of-the-art in reinforcement learning algorithms for robot control.</li>
-</ol>
+<table class=" lightable-minimal lightable-striped lightable-hover" style='font-family: "Trebuchet MS", verdana, sans-serif; margin-left: auto; margin-right: auto;'>
+<thead>
+<tr>
+<th style="text-align:left;">
+Task
+</th>
+<th style="text-align:left;">
+Start
+</th>
+<th style="text-align:right;">
+Duration
+</th>
+<th style="text-align:left;">
+Type
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Review Deep RL literature
+</td>
+<td style="text-align:left;">
+2020-07-15
+</td>
+<td style="text-align:right;">
+60
+</td>
+<td style="text-align:left;">
+Research
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Select state-of-the-art simulator
+</td>
+<td style="text-align:left;">
+2020-09-15
+</td>
+<td style="text-align:right;">
+15
+</td>
+<td style="text-align:left;">
+Research
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Learn to use the simulator
+</td>
+<td style="text-align:left;">
+2020-09-30
+</td>
+<td style="text-align:right;">
+60
+</td>
+<td style="text-align:left;">
+Learning
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Create simulation environment
+</td>
+<td style="text-align:left;">
+2020-12-01
+</td>
+<td style="text-align:right;">
+30
+</td>
+<td style="text-align:left;">
+Develop
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Train first agent without DR/ADR
+</td>
+<td style="text-align:left;">
+2021-01-01
+</td>
+<td style="text-align:right;">
+30
+</td>
+<td style="text-align:left;">
+Develop
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Review state-of-the-art DR/ADR
+</td>
+<td style="text-align:left;">
+2021-02-01
+</td>
+<td style="text-align:right;">
+15
+</td>
+<td style="text-align:left;">
+Research
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Train second agent with DR/ADR
+</td>
+<td style="text-align:left;">
+2021-02-15
+</td>
+<td style="text-align:right;">
+30
+</td>
+<td style="text-align:left;">
+Develop
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Transfer policies to real robot
+</td>
+<td style="text-align:left;">
+2021-03-15
+</td>
+<td style="text-align:right;">
+30
+</td>
+<td style="text-align:left;">
+Develop
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Make a comparative between both policies
+</td>
+<td style="text-align:left;">
+2021-04-15
+</td>
+<td style="text-align:right;">
+30
+</td>
+<td style="text-align:left;">
+Analysis
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Write the thesis
+</td>
+<td style="text-align:left;">
+2021-03-15
+</td>
+<td style="text-align:right;">
+120
+</td>
+<td style="text-align:left;">
+Writing
+</td>
+</tr>
+</tbody>
+</table>
+</section></section>
+<section><section id="strategy" class="title-slide slide level1"><h1>Project Strategy</h1></section><section id="rl-algorithm" class="slide level2">
+<h2>RL Algorithm</h2>
+<p>As the results show, the most promising algorithms for the type of task this project seeks to solve are:</p>
+<ul>
+<li><p><strong>PPO</strong>: Is stable, its implementation is simple, it allows working with complex action spaces, it is scalable and it has optimized and parallel implementations.</p></li>
+<li><p><strong>ACKTR</strong>: Is both sample and computationally efficient, uses second-order information, uses the natural gradient.</p></li>
+</ul>
+</section><section id="virtual-environment" class="slide level2">
+<h2>Virtual Environment</h2>
+<div class="figure" style="text-align: center">
+<img src="images/rl_env_pipline.png" alt="Common pipline for training Rl robotics agents"  />
+<p class="caption">
+Common pipline for training Rl robotics agents
+</p>
+</div>
+</section><section id="nvidia-isaac-sim" class="slide level2">
+<h2>Nvidia Isaac Sim</h2>
+<p>In June 2020 Nvidia released early access to its new robot simulation platform. This software features a realistic physics simulator optimized to work with GPUs, high image fidelity with Nvidia’s ray tracing and path tracing technology, as well as ROS connectivity and full Python support.</p>
+<center>
+<video data-autoplay src="videos/isaac_sim.m4v" loop="loop" width="720" height="405">
+</video>
+</center>
+</section><section id="section-8" class="slide level2">
+<h2></h2>
+<p>The complete list of features of Nvidia Isaac Sim is:</p>
+<ul>
+<li>Rigid Body Dynamics</li>
+<li>Destructible Environments</li>
+<li>Soft Body Simulation</li>
+<li>Gripper Simulation</li>
+<li>Robust and Precise Articulated Dynamics</li>
+<li>Sensors Simulation (LIDAR, Camera)</li>
+<li>Warehouse Simulation</li>
+<li>Dynamic motion Planning</li>
+<li>Scalable Simulations</li>
+<li>STR Path Planning</li>
+<li>Support for Domain Randomization</li>
+<li>ROS Bridge</li>
+</ul>
+</section><section id="experimental-platform" class="slide level2">
+<h2>Experimental Platform</h2>
+<p><img src="images/rl_implementation.png" width="120%" style="display: block; margin: auto;" /></p>
+</section><section id="physical-robot" class="slide level2">
+<h2>Physical Robot</h2>
+<p><img src="images/sawyer_specs.png" width="80%" style="display: block; margin: auto;" /></p>
+<p><strong>Note</strong>: Due to the pandemic, it is intended to work as much as possible with the virtual environments and leave as a secondary objective to work with the physical robot.</p>
+</section><section id="task-to-solve" class="slide level2">
+<h2>Task to solve</h2>
+<p>It is proposed to solve some goal based task that requires a certain degree of precision to solve. The proposed tasks to be solved are: <strong>Reaching, pick and place and pushing an object</strong>.</p>
+<!-- It is also necessary to consider the limitations of the simulation (simulation of sensors, dynamics of the task) and those of the hardware (sensors, tools). With this in mind, some of  -->
+<video data-autoplay src="videos/fetch_reach.mp4" loop="loop" width="280" height="280">
+</video>
+<video data-autoplay src="videos/fetch_pick_and_place.mp4" loop="loop" width="280" height="280">
+</video>
+<video data-autoplay src="videos/fetch_push.mp4" loop="loop" width="280" height="280">
+</video>
+</section></section>
+<section><section id="status" class="title-slide slide level1"><h1>Project Status</h1></section><section id="course-in-python-data-analysis" class="slide level2">
+<h2>Course in Python Data Analysis</h2>
+<p><img src="images/certificate_data_analysis.png" width="75%" style="display: block; margin: auto;" /></p>
+</section><section id="course-in-deep-learning-with-pytorch" class="slide level2">
+<h2>Course in Deep learning with PyTorch</h2>
+<p><img src="images/certificate_pytorch.png" width="75%" style="display: block; margin: auto;" /></p>
+</section><section id="course-in-image-recognition-with-dl" class="slide level2">
+<h2>Course in Image Recognition with DL</h2>
+<p><img src="images/certificate_image_recognition.png" width="75%" style="display: block; margin: auto;" /></p>
+</section><section id="check-list" class="slide level2">
+<h2>Check list</h2>
+<table class=" lightable-minimal lightable-hover" style='font-family: "Trebuchet MS", verdana, sans-serif; margin-left: auto; margin-right: auto;'>
+<thead>
+<tr>
+<th style="text-align:left;">
+Task
+</th>
+<th style="text-align:left;">
+Start
+</th>
+<th style="text-align:right;">
+Duration
+</th>
+<th style="text-align:left;">
+Type
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;color: white !important;background-color: #4caf50 !important;">
+Review Deep RL literature
+</td>
+<td style="text-align:left;color: white !important;background-color: #4caf50 !important;">
+2020-07-15
+</td>
+<td style="text-align:right;color: white !important;background-color: #4caf50 !important;">
+60
+</td>
+<td style="text-align:left;color: white !important;background-color: #4caf50 !important;">
+Research
+</td>
+</tr>
+<tr>
+<td style="text-align:left;color: white !important;background-color: #4caf50 !important;">
+Select state-of-the-art simulator
+</td>
+<td style="text-align:left;color: white !important;background-color: #4caf50 !important;">
+2020-09-15
+</td>
+<td style="text-align:right;color: white !important;background-color: #4caf50 !important;">
+15
+</td>
+<td style="text-align:left;color: white !important;background-color: #4caf50 !important;">
+Research
+</td>
+</tr>
+<tr>
+<td style="text-align:left;color: black !important;background-color: #ffc107 !important;">
+Learn to use the simulator
+</td>
+<td style="text-align:left;color: black !important;background-color: #ffc107 !important;">
+2020-09-30
+</td>
+<td style="text-align:right;color: black !important;background-color: #ffc107 !important;">
+60
+</td>
+<td style="text-align:left;color: black !important;background-color: #ffc107 !important;">
+Learning
+</td>
+</tr>
+<tr>
+<td style="text-align:left;color: black !important;background-color: #ff8f00 !important;">
+Create simulation environment
+</td>
+<td style="text-align:left;color: black !important;background-color: #ff8f00 !important;">
+2020-12-01
+</td>
+<td style="text-align:right;color: black !important;background-color: #ff8f00 !important;">
+30
+</td>
+<td style="text-align:left;color: black !important;background-color: #ff8f00 !important;">
+Develop
+</td>
+</tr>
+<tr>
+<td style="text-align:left;color: black !important;background-color: #ff8f00 !important;">
+Train first agent without DR/ADR
+</td>
+<td style="text-align:left;color: black !important;background-color: #ff8f00 !important;">
+2021-01-01
+</td>
+<td style="text-align:right;color: black !important;background-color: #ff8f00 !important;">
+30
+</td>
+<td style="text-align:left;color: black !important;background-color: #ff8f00 !important;">
+Develop
+</td>
+</tr>
+<tr>
+<td style="text-align:left;color: black !important;background-color: #ff8f00 !important;">
+Review state-of-the-art DR/ADR
+</td>
+<td style="text-align:left;color: black !important;background-color: #ff8f00 !important;">
+2021-02-01
+</td>
+<td style="text-align:right;color: black !important;background-color: #ff8f00 !important;">
+15
+</td>
+<td style="text-align:left;color: black !important;background-color: #ff8f00 !important;">
+Research
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Train second agent with DR/ADR
+</td>
+<td style="text-align:left;">
+2021-02-15
+</td>
+<td style="text-align:right;">
+30
+</td>
+<td style="text-align:left;">
+Develop
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Transfer policies to real robot
+</td>
+<td style="text-align:left;">
+2021-03-15
+</td>
+<td style="text-align:right;">
+30
+</td>
+<td style="text-align:left;">
+Develop
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Make a comparative between both policies
+</td>
+<td style="text-align:left;">
+2021-04-15
+</td>
+<td style="text-align:right;">
+30
+</td>
+<td style="text-align:left;">
+Analysis
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Write the thesis
+</td>
+<td style="text-align:left;">
+2021-03-15
+</td>
+<td style="text-align:right;">
+120
+</td>
+<td style="text-align:left;">
+Writing
+</td>
+</tr>
+</tbody>
+</table>
+</section><section id="chronogram-of-activities" class="slide level2">
+<h2>Chronogram of activities</h2>
+<div id="htmlwidget-2e9d7036b8664b818c3c" style="width:768px;height:576px;" class="plotly html-widget"></div>
+<script type="application/json" data-for="htmlwidget-2e9d7036b8664b818c3c">{"x":{"visdat":{"63e3220402d7":["function () ","plotlyVisDat"]},"cur_data":"63e3220402d7","attrs":{"63e3220402d7":{"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"x":["2020-07-15","2020-09-13"],"y":[10,10],"mode":"lines","line":{"color":"#E78AC3","width":20},"showlegend":false,"hoverinfo":"text","text":"Task:  Review Deep RL literature <br> Duration:  60 days<br> Type:  Research","evaluate":true,"inherit":true},"63e3220402d7.1":{"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"x":["2020-09-15","2020-09-30"],"y":[9,9],"mode":"lines","line":{"color":"#E78AC3","width":20},"showlegend":false,"hoverinfo":"text","text":"Task:  Select state-of-the-art simulator <br> Duration:  15 days<br> Type:  Research","evaluate":true,"inherit":true},"63e3220402d7.2":{"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"x":["2020-09-30","2020-11-29"],"y":[8,8],"mode":"lines","line":{"color":"#8DA0CB","width":20},"showlegend":false,"hoverinfo":"text","text":"Task:  Learn to use the simulator <br> Duration:  60 days<br> Type:  Learning","evaluate":true,"inherit":true},"63e3220402d7.3":{"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"x":["2020-12-01","2020-12-31"],"y":[7,7],"mode":"lines","line":{"color":"#FC8D62","width":20},"showlegend":false,"hoverinfo":"text","text":"Task:  Create simulation environment <br> Duration:  30 days<br> Type:  Develop","evaluate":true,"inherit":true},"63e3220402d7.4":{"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"x":["2021-01-01","2021-01-31"],"y":[6,6],"mode":"lines","line":{"color":"#FC8D62","width":20},"showlegend":false,"hoverinfo":"text","text":"Task:  Train first agent without DR/ADR <br> Duration:  30 days<br> Type:  Develop","evaluate":true,"inherit":true},"63e3220402d7.5":{"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"x":["2021-02-01","2021-02-16"],"y":[5,5],"mode":"lines","line":{"color":"#E78AC3","width":20},"showlegend":false,"hoverinfo":"text","text":"Task:  Review state-of-the-art DR/ADR <br> Duration:  15 days<br> Type:  Research","evaluate":true,"inherit":true},"63e3220402d7.6":{"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"x":["2021-02-15","2021-03-17"],"y":[4,4],"mode":"lines","line":{"color":"#FC8D62","width":20},"showlegend":false,"hoverinfo":"text","text":"Task:  Train second agent with DR/ADR <br> Duration:  30 days<br> Type:  Develop","evaluate":true,"inherit":true},"63e3220402d7.7":{"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"x":["2021-03-15","2021-04-14"],"y":[3,3],"mode":"lines","line":{"color":"#FC8D62","width":20},"showlegend":false,"hoverinfo":"text","text":"Task:  Transfer policies to real robot <br> Duration:  30 days<br> Type:  Develop","evaluate":true,"inherit":true},"63e3220402d7.8":{"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"x":["2021-04-15","2021-05-15"],"y":[2,2],"mode":"lines","line":{"color":"#66C2A5","width":20},"showlegend":false,"hoverinfo":"text","text":"Task:  Make a comparative between both policies <br> Duration:  30 days<br> Type:  Analysis","evaluate":true,"inherit":true},"63e3220402d7.9":{"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"x":["2021-03-15","2021-07-13"],"y":[1,1],"mode":"lines","line":{"color":"#A6D854","width":20},"showlegend":false,"hoverinfo":"text","text":"Task:  Write the thesis <br> Duration:  120 days<br> Type:  Writing","evaluate":true,"inherit":true}},"layout":{"width":900,"height":600,"margin":{"b":40,"l":60,"t":25,"r":10},"xaxis":{"domain":[0,1],"automargin":true,"showgrid":true,"tickfont":{"color":"#000000"},"title":[]},"yaxis":{"domain":[0,0.9],"automargin":true,"showgrid":true,"tickfont":{"color":"#000000"},"tickmode":"array","tickvals":[10,9,8,7,6,5,4,3,2,1],"ticktext":["Review Deep RL literature","Select state-of-the-art simulator","Learn to use the simulator","Create simulation environment","Train first agent without DR/ADR","Review state-of-the-art DR/ADR","Train second agent with DR/ADR","Transfer policies to real robot","Make a comparative between both policies","Write the thesis"],"title":[]},"legend":{"orientation":"h"},"hovermode":"closest","showlegend":false},"source":"A","config":{"showSendToCloud":false},"data":[{"x":["2020-07-15","2020-09-13"],"y":[10,10],"mode":"lines","line":{"color":"#E78AC3","width":20},"showlegend":false,"hoverinfo":["text","text"],"text":["Task:  Review Deep RL literature <br> Duration:  60 days<br> Type:  Research","Task:  Review Deep RL literature <br> Duration:  60 days<br> Type:  Research"],"evaluate":true,"type":"scatter","marker":{"color":"rgba(31,119,180,1)","line":{"color":"rgba(31,119,180,1)"}},"error_y":{"color":"rgba(31,119,180,1)"},"error_x":{"color":"rgba(31,119,180,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["2020-09-15","2020-09-30"],"y":[9,9],"mode":"lines","line":{"color":"#E78AC3","width":20},"showlegend":false,"hoverinfo":["text","text"],"text":["Task:  Select state-of-the-art simulator <br> Duration:  15 days<br> Type:  Research","Task:  Select state-of-the-art simulator <br> Duration:  15 days<br> Type:  Research"],"evaluate":true,"type":"scatter","marker":{"color":"rgba(255,127,14,1)","line":{"color":"rgba(255,127,14,1)"}},"error_y":{"color":"rgba(255,127,14,1)"},"error_x":{"color":"rgba(255,127,14,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["2020-09-30","2020-11-29"],"y":[8,8],"mode":"lines","line":{"color":"#8DA0CB","width":20},"showlegend":false,"hoverinfo":["text","text"],"text":["Task:  Learn to use the simulator <br> Duration:  60 days<br> Type:  Learning","Task:  Learn to use the simulator <br> Duration:  60 days<br> Type:  Learning"],"evaluate":true,"type":"scatter","marker":{"color":"rgba(44,160,44,1)","line":{"color":"rgba(44,160,44,1)"}},"error_y":{"color":"rgba(44,160,44,1)"},"error_x":{"color":"rgba(44,160,44,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["2020-12-01","2020-12-31"],"y":[7,7],"mode":"lines","line":{"color":"#FC8D62","width":20},"showlegend":false,"hoverinfo":["text","text"],"text":["Task:  Create simulation environment <br> Duration:  30 days<br> Type:  Develop","Task:  Create simulation environment <br> Duration:  30 days<br> Type:  Develop"],"evaluate":true,"type":"scatter","marker":{"color":"rgba(214,39,40,1)","line":{"color":"rgba(214,39,40,1)"}},"error_y":{"color":"rgba(214,39,40,1)"},"error_x":{"color":"rgba(214,39,40,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["2021-01-01","2021-01-31"],"y":[6,6],"mode":"lines","line":{"color":"#FC8D62","width":20},"showlegend":false,"hoverinfo":["text","text"],"text":["Task:  Train first agent without DR/ADR <br> Duration:  30 days<br> Type:  Develop","Task:  Train first agent without DR/ADR <br> Duration:  30 days<br> Type:  Develop"],"evaluate":true,"type":"scatter","marker":{"color":"rgba(148,103,189,1)","line":{"color":"rgba(148,103,189,1)"}},"error_y":{"color":"rgba(148,103,189,1)"},"error_x":{"color":"rgba(148,103,189,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["2021-02-01","2021-02-16"],"y":[5,5],"mode":"lines","line":{"color":"#E78AC3","width":20},"showlegend":false,"hoverinfo":["text","text"],"text":["Task:  Review state-of-the-art DR/ADR <br> Duration:  15 days<br> Type:  Research","Task:  Review state-of-the-art DR/ADR <br> Duration:  15 days<br> Type:  Research"],"evaluate":true,"type":"scatter","marker":{"color":"rgba(140,86,75,1)","line":{"color":"rgba(140,86,75,1)"}},"error_y":{"color":"rgba(140,86,75,1)"},"error_x":{"color":"rgba(140,86,75,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["2021-02-15","2021-03-17"],"y":[4,4],"mode":"lines","line":{"color":"#FC8D62","width":20},"showlegend":false,"hoverinfo":["text","text"],"text":["Task:  Train second agent with DR/ADR <br> Duration:  30 days<br> Type:  Develop","Task:  Train second agent with DR/ADR <br> Duration:  30 days<br> Type:  Develop"],"evaluate":true,"type":"scatter","marker":{"color":"rgba(227,119,194,1)","line":{"color":"rgba(227,119,194,1)"}},"error_y":{"color":"rgba(227,119,194,1)"},"error_x":{"color":"rgba(227,119,194,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["2021-03-15","2021-04-14"],"y":[3,3],"mode":"lines","line":{"color":"#FC8D62","width":20},"showlegend":false,"hoverinfo":["text","text"],"text":["Task:  Transfer policies to real robot <br> Duration:  30 days<br> Type:  Develop","Task:  Transfer policies to real robot <br> Duration:  30 days<br> Type:  Develop"],"evaluate":true,"type":"scatter","marker":{"color":"rgba(127,127,127,1)","line":{"color":"rgba(127,127,127,1)"}},"error_y":{"color":"rgba(127,127,127,1)"},"error_x":{"color":"rgba(127,127,127,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["2021-04-15","2021-05-15"],"y":[2,2],"mode":"lines","line":{"color":"#66C2A5","width":20},"showlegend":false,"hoverinfo":["text","text"],"text":["Task:  Make a comparative between both policies <br> Duration:  30 days<br> Type:  Analysis","Task:  Make a comparative between both policies <br> Duration:  30 days<br> Type:  Analysis"],"evaluate":true,"type":"scatter","marker":{"color":"rgba(188,189,34,1)","line":{"color":"rgba(188,189,34,1)"}},"error_y":{"color":"rgba(188,189,34,1)"},"error_x":{"color":"rgba(188,189,34,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["2021-03-15","2021-07-13"],"y":[1,1],"mode":"lines","line":{"color":"#A6D854","width":20},"showlegend":false,"hoverinfo":["text","text"],"text":["Task:  Write the thesis <br> Duration:  120 days<br> Type:  Writing","Task:  Write the thesis <br> Duration:  120 days<br> Type:  Writing"],"evaluate":true,"type":"scatter","marker":{"color":"rgba(23,190,207,1)","line":{"color":"rgba(23,190,207,1)"}},"error_y":{"color":"rgba(23,190,207,1)"},"error_x":{"color":"rgba(23,190,207,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</section></section>
+<section><section id="refs" class="title-slide slide level1"><h1>References</h1></section><section id="section-9" class="slide level2">
+<h2></h2>
+<div id="refs" style="width: 1000px; height: 600px; overflow-y: scroll;" role="doc-bibliography">
+<div id="ref-dongDeepReinforcementLearning2020a">
+<p>Dong, Hao, Zihan Ding, and Shanghang Zhang, eds. 2020. <em>Deep Reinforcement Learning: Fundamentals, Research and Applications</em>. Springer Singapore. <a href="https://doi.org/10.1007/978-981-15-4095-0">https://doi.org/10.1007/978-981-15-4095-0</a>.</p>
+</div>
+<div id="ref-haarnojaSoftActorCriticAlgorithms2019">
+<p>Haarnoja, Tuomas, Aurick Zhou, Kristian Hartikainen, George Tucker, Sehoon Ha, Jie Tan, Vikash Kumar, et al. 2019. “Soft Actor-Critic Algorithms and Applications.” <em>arXiv:1812.05905 [Cs, Stat]</em>, January. <a href="http://arxiv.org/abs/1812.05905">http://arxiv.org/abs/1812.05905</a>.</p>
+</div>
+<div id="ref-heessEmergenceLocomotionBehaviours2017">
+<p>Heess, Nicolas, Dhruva TB, Srinivasan Sriram, Jay Lemmon, Josh Merel, Greg Wayne, Yuval Tassa, et al. 2017. “Emergence of Locomotion Behaviours in Rich Environments.” <em>arXiv:1707.02286 [Cs]</em>, July. <a href="http://arxiv.org/abs/1707.02286">http://arxiv.org/abs/1707.02286</a>.</p>
+</div>
+<div id="ref-kondaActorCriticAlgorithms">
+<p>Konda, Vijay R, and John N Tsitsiklis. n.d. “Actor-Critic Algorithms,” 7.</p>
+</div>
+<div id="ref-martensOptimizingNeuralNetworks2015">
+<p>Martens, James, and Roger Grosse. 2015. “Optimizing Neural Networks with Kronecker-Factored Approximate Curvature,” March.</p>
+</div>
+<div id="ref-mnihAsynchronousMethodsDeep2016">
+<p>Mnih, Volodymyr, Adrià Puigdomènech Badia, Mehdi Mirza, Alex Graves, Timothy P. Lillicrap, Tim Harley, David Silver, and Koray Kavukcuoglu. 2016. “Asynchronous Methods for Deep Reinforcement Learning.” <em>arXiv:1602.01783 [Cs]</em>, June. <a href="http://arxiv.org/abs/1602.01783">http://arxiv.org/abs/1602.01783</a>.</p>
+</div>
+<div id="ref-pfauConnectingGenerativeAdversarial2017">
+<p>Pfau, David, and Oriol Vinyals. 2017. “Connecting Generative Adversarial Networks and Actor-Critic Methods.” <em>arXiv:1610.01945 [Cs, Stat]</em>, January. <a href="http://arxiv.org/abs/1610.01945">http://arxiv.org/abs/1610.01945</a>.</p>
+</div>
+<div id="ref-ROBOTLEARNINGEdited1999">
+<p>“ROBOT LEARNING, Edited by Jonathan H. Connell and Sridhar Mahadevan, Kluwer, Boston, 1993/1997, Xii+240 Pp., ISBN 0-7923-9365-1 (Hardback, 218.00 Guilders, $120.00, 89.95).” 1999. <em>Robotica</em> 17 (2): 229–35. <a href="https://doi.org/10.1017/S0263574799271172">https://doi.org/10.1017/S0263574799271172</a>.</p>
+</div>
+<div id="ref-schulmanTrustRegionPolicy2017">
+<p>Schulman, John, Sergey Levine, Philipp Moritz, Michael I. Jordan, and Pieter Abbeel. 2017. “Trust Region Policy Optimization.” <em>arXiv:1502.05477 [Cs]</em>, April. <a href="http://arxiv.org/abs/1502.05477">http://arxiv.org/abs/1502.05477</a>.</p>
+</div>
+<div id="ref-schulmanProximalPolicyOptimization2017">
+<p>Schulman, John, Filip Wolski, Prafulla Dhariwal, Alec Radford, and Oleg Klimov. 2017. “Proximal Policy Optimization Algorithms.” <em>arXiv:1707.06347 [Cs]</em>, August. <a href="http://arxiv.org/abs/1707.06347">http://arxiv.org/abs/1707.06347</a>.</p>
+</div>
+</div>
 </section><section id="section-10" class="slide level2">
 <h2></h2>
-<ol start="4" type="1">
-<li>Implement one or more of the state-of-the-art RL algorithms for robot control to solve the selected task in the simulation environment (without domain randomization).</li>
-<li>Review of the state-of-the-art of domain randomization techniques.</li>
-<li>Implement state-of-the-art techniques in domain randomization and retrain the agent to solve the selected task.</li>
-<li>Transfer the policies learned in simulation (with and without domain randomization) to the physical robot and make a comparison of performance in the selected task.</li>
-<li>Communicate the results.</li>
-</ol>
-</section><section id="scientific-contribution" class="slide level2">
-<h2>Scientific contribution</h2>
-<p>The main contribution of this work is to solve a dexterous manipulation task<span class="math inline">\(^{*}\)</span> with a redundant serial robot by training an agent purely in simulation.</p>
-</section></section>
-<section><section id="activities" class="title-slide slide level1"><h1>Chronogram of activities</h1></section><section id="section-11" class="slide level2">
-<h2></h2>
-<div id="htmlwidget-da38477e241741f59e08" style="width:768px;height:576px;" class="plotly html-widget"></div>
-<script type="application/json" data-for="htmlwidget-da38477e241741f59e08">{"x":{"visdat":{"5c0457df02b6":["function () ","plotlyVisDat"]},"cur_data":"5c0457df02b6","attrs":{"5c0457df02b6":{"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"x":["2020-07-15","2020-09-13"],"y":[10,10],"mode":"lines","line":{"color":"#E78AC3","width":20},"showlegend":false,"hoverinfo":"text","text":"Task:  Review Deep RL literature <br> Duration:  60 days<br> Type:  Research","evaluate":true,"inherit":true},"5c0457df02b6.1":{"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"x":["2020-09-15","2020-09-30"],"y":[9,9],"mode":"lines","line":{"color":"#E78AC3","width":20},"showlegend":false,"hoverinfo":"text","text":"Task:  Select state-of-the-art simulator <br> Duration:  15 days<br> Type:  Research","evaluate":true,"inherit":true},"5c0457df02b6.2":{"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"x":["2020-09-30","2020-11-29"],"y":[8,8],"mode":"lines","line":{"color":"#8DA0CB","width":20},"showlegend":false,"hoverinfo":"text","text":"Task:  Learn to use the simulator <br> Duration:  60 days<br> Type:  Learning","evaluate":true,"inherit":true},"5c0457df02b6.3":{"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"x":["2020-12-01","2020-12-31"],"y":[7,7],"mode":"lines","line":{"color":"#FC8D62","width":20},"showlegend":false,"hoverinfo":"text","text":"Task:  Create simulation environment <br> Duration:  30 days<br> Type:  Develop","evaluate":true,"inherit":true},"5c0457df02b6.4":{"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"x":["2021-01-01","2021-01-31"],"y":[6,6],"mode":"lines","line":{"color":"#FC8D62","width":20},"showlegend":false,"hoverinfo":"text","text":"Task:  Train first agent without DR/ADR <br> Duration:  30 days<br> Type:  Develop","evaluate":true,"inherit":true},"5c0457df02b6.5":{"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"x":["2021-02-01","2021-02-16"],"y":[5,5],"mode":"lines","line":{"color":"#E78AC3","width":20},"showlegend":false,"hoverinfo":"text","text":"Task:  Review state-of-the-art DR/ADR <br> Duration:  15 days<br> Type:  Research","evaluate":true,"inherit":true},"5c0457df02b6.6":{"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"x":["2021-02-15","2021-03-17"],"y":[4,4],"mode":"lines","line":{"color":"#FC8D62","width":20},"showlegend":false,"hoverinfo":"text","text":"Task:  Tranin second agent with DR/ADR <br> Duration:  30 days<br> Type:  Develop","evaluate":true,"inherit":true},"5c0457df02b6.7":{"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"x":["2021-03-15","2021-04-14"],"y":[3,3],"mode":"lines","line":{"color":"#FC8D62","width":20},"showlegend":false,"hoverinfo":"text","text":"Task:  Transfer policies to real robot <br> Duration:  30 days<br> Type:  Develop","evaluate":true,"inherit":true},"5c0457df02b6.8":{"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"x":["2021-04-15","2021-05-15"],"y":[2,2],"mode":"lines","line":{"color":"#66C2A5","width":20},"showlegend":false,"hoverinfo":"text","text":"Task:  Make a comparative between both policies <br> Duration:  30 days<br> Type:  Analysis","evaluate":true,"inherit":true},"5c0457df02b6.9":{"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"x":["2021-05-15","2021-07-14"],"y":[1,1],"mode":"lines","line":{"color":"#A6D854","width":20},"showlegend":false,"hoverinfo":"text","text":"Task:  Write the thesis <br> Duration:  60 days<br> Type:  Writing","evaluate":true,"inherit":true}},"layout":{"width":900,"height":600,"margin":{"b":40,"l":60,"t":25,"r":10},"xaxis":{"domain":[0,1],"automargin":true,"showgrid":true,"tickfont":{"color":"#000000"},"title":[]},"yaxis":{"domain":[0,0.9],"automargin":true,"showgrid":true,"tickfont":{"color":"#000000"},"tickmode":"array","tickvals":[10,9,8,7,6,5,4,3,2,1],"ticktext":["Review Deep RL literature","Select state-of-the-art simulator","Learn to use the simulator","Create simulation environment","Train first agent without DR/ADR","Review state-of-the-art DR/ADR","Tranin second agent with DR/ADR","Transfer policies to real robot","Make a comparative between both policies","Write the thesis"],"title":[]},"legend":{"orientation":"h"},"hovermode":"closest","showlegend":false},"source":"A","config":{"showSendToCloud":false},"data":[{"x":["2020-07-15","2020-09-13"],"y":[10,10],"mode":"lines","line":{"color":"#E78AC3","width":20},"showlegend":false,"hoverinfo":["text","text"],"text":["Task:  Review Deep RL literature <br> Duration:  60 days<br> Type:  Research","Task:  Review Deep RL literature <br> Duration:  60 days<br> Type:  Research"],"evaluate":true,"type":"scatter","marker":{"color":"rgba(31,119,180,1)","line":{"color":"rgba(31,119,180,1)"}},"error_y":{"color":"rgba(31,119,180,1)"},"error_x":{"color":"rgba(31,119,180,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["2020-09-15","2020-09-30"],"y":[9,9],"mode":"lines","line":{"color":"#E78AC3","width":20},"showlegend":false,"hoverinfo":["text","text"],"text":["Task:  Select state-of-the-art simulator <br> Duration:  15 days<br> Type:  Research","Task:  Select state-of-the-art simulator <br> Duration:  15 days<br> Type:  Research"],"evaluate":true,"type":"scatter","marker":{"color":"rgba(255,127,14,1)","line":{"color":"rgba(255,127,14,1)"}},"error_y":{"color":"rgba(255,127,14,1)"},"error_x":{"color":"rgba(255,127,14,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["2020-09-30","2020-11-29"],"y":[8,8],"mode":"lines","line":{"color":"#8DA0CB","width":20},"showlegend":false,"hoverinfo":["text","text"],"text":["Task:  Learn to use the simulator <br> Duration:  60 days<br> Type:  Learning","Task:  Learn to use the simulator <br> Duration:  60 days<br> Type:  Learning"],"evaluate":true,"type":"scatter","marker":{"color":"rgba(44,160,44,1)","line":{"color":"rgba(44,160,44,1)"}},"error_y":{"color":"rgba(44,160,44,1)"},"error_x":{"color":"rgba(44,160,44,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["2020-12-01","2020-12-31"],"y":[7,7],"mode":"lines","line":{"color":"#FC8D62","width":20},"showlegend":false,"hoverinfo":["text","text"],"text":["Task:  Create simulation environment <br> Duration:  30 days<br> Type:  Develop","Task:  Create simulation environment <br> Duration:  30 days<br> Type:  Develop"],"evaluate":true,"type":"scatter","marker":{"color":"rgba(214,39,40,1)","line":{"color":"rgba(214,39,40,1)"}},"error_y":{"color":"rgba(214,39,40,1)"},"error_x":{"color":"rgba(214,39,40,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["2021-01-01","2021-01-31"],"y":[6,6],"mode":"lines","line":{"color":"#FC8D62","width":20},"showlegend":false,"hoverinfo":["text","text"],"text":["Task:  Train first agent without DR/ADR <br> Duration:  30 days<br> Type:  Develop","Task:  Train first agent without DR/ADR <br> Duration:  30 days<br> Type:  Develop"],"evaluate":true,"type":"scatter","marker":{"color":"rgba(148,103,189,1)","line":{"color":"rgba(148,103,189,1)"}},"error_y":{"color":"rgba(148,103,189,1)"},"error_x":{"color":"rgba(148,103,189,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["2021-02-01","2021-02-16"],"y":[5,5],"mode":"lines","line":{"color":"#E78AC3","width":20},"showlegend":false,"hoverinfo":["text","text"],"text":["Task:  Review state-of-the-art DR/ADR <br> Duration:  15 days<br> Type:  Research","Task:  Review state-of-the-art DR/ADR <br> Duration:  15 days<br> Type:  Research"],"evaluate":true,"type":"scatter","marker":{"color":"rgba(140,86,75,1)","line":{"color":"rgba(140,86,75,1)"}},"error_y":{"color":"rgba(140,86,75,1)"},"error_x":{"color":"rgba(140,86,75,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["2021-02-15","2021-03-17"],"y":[4,4],"mode":"lines","line":{"color":"#FC8D62","width":20},"showlegend":false,"hoverinfo":["text","text"],"text":["Task:  Tranin second agent with DR/ADR <br> Duration:  30 days<br> Type:  Develop","Task:  Tranin second agent with DR/ADR <br> Duration:  30 days<br> Type:  Develop"],"evaluate":true,"type":"scatter","marker":{"color":"rgba(227,119,194,1)","line":{"color":"rgba(227,119,194,1)"}},"error_y":{"color":"rgba(227,119,194,1)"},"error_x":{"color":"rgba(227,119,194,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["2021-03-15","2021-04-14"],"y":[3,3],"mode":"lines","line":{"color":"#FC8D62","width":20},"showlegend":false,"hoverinfo":["text","text"],"text":["Task:  Transfer policies to real robot <br> Duration:  30 days<br> Type:  Develop","Task:  Transfer policies to real robot <br> Duration:  30 days<br> Type:  Develop"],"evaluate":true,"type":"scatter","marker":{"color":"rgba(127,127,127,1)","line":{"color":"rgba(127,127,127,1)"}},"error_y":{"color":"rgba(127,127,127,1)"},"error_x":{"color":"rgba(127,127,127,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["2021-04-15","2021-05-15"],"y":[2,2],"mode":"lines","line":{"color":"#66C2A5","width":20},"showlegend":false,"hoverinfo":["text","text"],"text":["Task:  Make a comparative between both policies <br> Duration:  30 days<br> Type:  Analysis","Task:  Make a comparative between both policies <br> Duration:  30 days<br> Type:  Analysis"],"evaluate":true,"type":"scatter","marker":{"color":"rgba(188,189,34,1)","line":{"color":"rgba(188,189,34,1)"}},"error_y":{"color":"rgba(188,189,34,1)"},"error_x":{"color":"rgba(188,189,34,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["2021-05-15","2021-07-14"],"y":[1,1],"mode":"lines","line":{"color":"#A6D854","width":20},"showlegend":false,"hoverinfo":["text","text"],"text":["Task:  Write the thesis <br> Duration:  60 days<br> Type:  Writing","Task:  Write the thesis <br> Duration:  60 days<br> Type:  Writing"],"evaluate":true,"type":"scatter","marker":{"color":"rgba(23,190,207,1)","line":{"color":"rgba(23,190,207,1)"}},"error_y":{"color":"rgba(23,190,207,1)"},"error_x":{"color":"rgba(23,190,207,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
-</section></section>
-<section><section id="references" class="title-slide slide level1"><h1>References</h1></section><section id="section-12" class="slide level2">
-<h2></h2>
-<ol type="1">
-<li><p>Ilge Akkaya, Marcin Andrychowicz, Maciek Chociej, Mateusz Litwin, Bob McGrew, Arthur Petron, Alex Paino, Matthias Plappert, Glenn Powell, Raphael Ribas, et al. Solving rubik’s cube with a robot hand. arXiv preprint arXiv:1910.07113, 2019.</p></li>
-<li><p>OpenAI, Marcin Andrychowicz, Bowen Baker, Maciek Chociej, Rafal Jozefowicz, Bob McGrew, Jakub Pa- chocki, Arthur Petron, Matthias Plappert, Glenn Powell, Alex Ray, Jonas Schneider, Szymon Sidor, Josh Tobin, Peter Welinder, Lilian Weng, and Wojciech Zaremba. Learning dexterous in-hand manipulation, 2018.</p></li>
-<li><p>Wenbo Gao, Laura Graesser, Krzysztof Choromanski, Xingyou Song, Nevena Lazic, Pannag Sanketi, Vikas Sindhwani, and Navdeep Jaitly. Robotic table tennis with model-free reinforcement learning. arXiv preprint arXiv:2003.14398, 2020.</p></li>
-</ol>
-</section><section id="section-13" class="slide level2">
-<h2></h2>
-<ol start="4" type="1">
-<li><p>Volodymyr Mnih, Koray Kavukcuoglu, David Silver, Alex Graves, Ioannis Antonoglou, Daan Wierstra, and Martin Riedmiller. Playing atari with deep reinforcement learning. arXiv preprint arXiv:1312.5602, 2013.</p></li>
-<li><p>OpenAI. Openai five. <a href="https://blog.openai.com/openai-five/" class="uri">https://blog.openai.com/openai-five/</a>, 2018.</p></li>
-<li><p>Xue Bin Peng, Marcin Andrychowicz, Wojciech Zaremba, and Pieter Abbeel. Sim-to-real transfer of robotic control with dynamics randomization. In 2018 IEEE international conference on robotics and automation (ICRA), pages 1–8. IEEE, 2018.</p></li>
-<li><p>David Silver, Thomas Hubert, Julian Schrittwieser, Ioannis Antonoglou, Matthew Lai, Arthur Guez, Marc Lanctot, Laurent Sifre, Dharshan Kumaran, Thore Graepel, et al. Mastering chess and shogi by self-play with a general reinforcement learning algorithm. arXiv preprint arXiv:1712.01815, 2017.</p></li>
-</ol>
-</section><section id="section-14" class="slide level2">
-<h2></h2>
-<ol start="8" type="1">
-<li><p>Xingyou Song, Yuxiang Yang, Krzysztof Choromanski, Ken Caluwaerts, Wenbo Gao, Chelsea Finn, and Jie Tan. Rapidly adaptable legged robots via evolutionary meta-learning. arXiv preprint arXiv:2003.01239, 2020.</p></li>
-<li><p>Jie Tan, Tingnan Zhang, Erwin Coumans, Atil Iscen, Yunfei Bai, Danijar Hafner, Steven Bohez, and Vincent Vanhoucke. Sim-to-real: Learning agile locomotion for quadruped robots. arXiv preprint arXiv:1804.10332, 2018.</p></li>
-<li><p>Josh Tobin, Rachel Fong, Alex Ray, Jonas Schneider, Wojciech Zaremba, and Pieter Abbeel. Domain randomization for transferring deep neural networks from simulation to the real world. In 2017 IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS), pages 23–30. IEEE, 2017.</p></li>
-<li><p>Andy Zeng, Shuran Song, Johnny Lee, Alberto Rodriguez, and Thomas Funkhouser. Tossingbot: Learning to throw arbitrary objects with residual physics. IEEE Transactions on Robotics, 2020.</p></li>
-</ol>
+<br>
+<center>
+<h1>
+Thank you for your attention ☕
+</h1>
+</center>
 </section></section>
     </div>
   </div>
 
-  <script src="slides_files/reveal.js-3.3.0.1/lib/js/head.min.js"></script>
-  <script src="slides_files/reveal.js-3.3.0.1/js/reveal.js"></script>
+  <script src="thesis-slides-temp_files/reveal.js-3.3.0.1/lib/js/head.min.js"></script>
+  <script src="thesis-slides-temp_files/reveal.js-3.3.0.1/js/reveal.js"></script>
 
   <script>
 
