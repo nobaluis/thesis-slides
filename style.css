@@ -62,3 +62,63 @@
   margin-left: 0;
   margin-right: 0;
 }
+
+/* Tables */
+
+/* Table: Fundamental css */
+.reveal table {
+    /* Remove spacing between table cells (from Normalize.css) */
+    border-collapse: collapse;
+    border-spacing: 0;
+    empty-cells: show;
+    border: 1px solid #cbcbcb;
+}
+
+.reveal table caption {
+    color: #000;
+    font: italic 85%/1 arial, sans-serif;
+    padding: 1em 0;
+    text-align: center;
+}
+
+.reveal table td,
+.reveal table th {
+    border-left: 1px solid #cbcbcb;/*  inner column border */
+    border-width: 0 0 0 1px;
+    font-size: inherit;
+    margin: 0;
+    overflow: visible; /*to make ths where the title is really long work*/
+    padding: 6px 12px; /* cell padding */
+}
+.reveal table td:first-child,
+.reveal table th:first-child {
+    border-left-width: 0;
+}
+
+.reveal table thead {
+    background: #e0e0e0;
+    color: #000;
+    text-align: left;
+    vertical-align: bottom;
+    white-space: nowrap;
+}
+
+/*Table: striping*/
+.reveal table td {
+    background-color: #f2f2f2;
+}
+
+/* nth-child selector for modern browsers */
+.reveal table tr:nth-child(2n-1) td {
+    background-color: transparent;
+}
+
+
+/* BORDERED TABLES */
+.reveal table td {
+    border-bottom:1px solid #cbcbcb;
+}
+.reveal table tbody > tr:last-child td,
+.reveal table tbody > tr:last-child td {
+    border-bottom-width: 0;
+}

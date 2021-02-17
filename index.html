@@ -459,86 +459,229 @@ document.getElementsByTagName('head')[0].appendChild(style);
 <section id="presentation-outline" class="slide level2">
 <h2>Presentation outline</h2>
 <ul>
-<li><a href="#/quick_review">Quick review</a>
-<ul>
-<li><a href="#/hypothesis">Hypothesis</a></li>
-<li><a href="#/general_objective">General objective</a></li>
-<li><a href="#/specific_objectives">Specific objectives</a></li>
-</ul></li>
-<li><a href="#/simulator">Simulator</a></li>
+<li><a href="#/simulators">Learning in simulation</a></li>
+<li><a href="#/isaac">Isaac Sim</a></li>
+<li><a href="#/project_review">Project review</a></li>
 <li><a href="#/case_study">Case of study</a></li>
-<li><a href="#/task">Task to solve</a>
-<ul>
-<li><a href="#/task_des">Task description</a></li>
-<li><a href="#/proposal_sol">Proposal solution</a></li>
-<li><a href="#/current_status">Implementation status</a></li>
-</ul></li>
+<li><a href="#/task">Task to solve</a></li>
 <li><a href="#/references">References</a></li>
 </ul>
 </section>
 <section>
-<section id="quick_review" class="title-slide slide level1">
-<h1>Quick review</h1>
+<section id="simulators" class="title-slide slide level1">
+<h1>Learning in simulation</h1>
 
 </section>
-<section id="hypothesis" class="slide level2">
-<h2>Hypothesis</h2>
-<blockquote>
-<p>If we train a Deep RL model in a virtual environment where the physics are randomly modified, then it is possible to solve a specific dexterous manipulation task with a robotic system.</p>
-</blockquote>
+<section id="current-approach" class="slide level2">
+<h2>Current approach</h2>
+<table>
+<colgroup>
+<col style="width: 62%" />
+<col style="width: 10%" />
+<col style="width: 4%" />
+<col style="width: 9%" />
+<col style="width: 13%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Publication</th>
+<th style="text-align: center;">Author</th>
+<th style="text-align: center;">Year</th>
+<th style="text-align: center;">Simulator</th>
+<th style="text-align: center;">Application</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Learning 6-DOF Grasping Interaction via Deep Geometry-aware 3D Representations</td>
+<td style="text-align: center;">Yan et al.</td>
+<td style="text-align: center;">2018</td>
+<td style="text-align: center;">Pybullet</td>
+<td style="text-align: center;">grasping</td>
+</tr>
+<tr class="even">
+<td>Sim-to-Real: Learning Agile Locomotion For Quadruped Robots</td>
+<td style="text-align: center;">Tan et al.</td>
+<td style="text-align: center;">2018</td>
+<td style="text-align: center;">Pybullet</td>
+<td style="text-align: center;">locomotion</td>
+</tr>
+<tr class="odd">
+<td>A Sim2real method based on DDQN for training a self-driving scale car</td>
+<td style="text-align: center;">Zhang et al.</td>
+<td style="text-align: center;">2019</td>
+<td style="text-align: center;">Unity</td>
+<td style="text-align: center;">self-driving car</td>
+</tr>
+<tr class="even">
+<td>Multi-Agent Manipulation via Locomotion using Hierarchical Sim2Real</td>
+<td style="text-align: center;">Nachum et al.</td>
+<td style="text-align: center;">2019</td>
+<td style="text-align: center;">Mujoco</td>
+<td style="text-align: center;">locomotion</td>
+</tr>
+<tr class="odd">
+<td>DeepRacer: Educational Autonomous Racing Platform for Experimentation with Sim2Real Reinforcement Learning</td>
+<td style="text-align: center;">Balaji et al.</td>
+<td style="text-align: center;">2019</td>
+<td style="text-align: center;">Gazebo</td>
+<td style="text-align: center;">self-driving car</td>
+</tr>
+<tr class="even">
+<td>Solving Rubik’s Cube with a Robot Hand</td>
+<td style="text-align: center;">Akkaya et al.</td>
+<td style="text-align: center;">2019</td>
+<td style="text-align: center;">Mujoco + Unity</td>
+<td style="text-align: center;">in-hand manipulation</td>
+</tr>
+<tr class="odd">
+<td>The Importance and the Limitations of Sim2Real for Robotic Manipulation in Precision Agriculture</td>
+<td style="text-align: center;">Rizzardo et al.</td>
+<td style="text-align: center;">2020</td>
+<td style="text-align: center;">Gazebo</td>
+<td style="text-align: center;">manipulation</td>
+</tr>
+<tr class="even">
+<td>Sim2Real for Self-Supervised Monocular Depth and Segmentation</td>
+<td style="text-align: center;">Raghavan et al.</td>
+<td style="text-align: center;">2020</td>
+<td style="text-align: center;">Unity</td>
+<td style="text-align: center;">segmentation</td>
+</tr>
+<tr class="odd">
+<td>TossingBot: Learning to Throw Arbitrary Objects with Residual Physics</td>
+<td style="text-align: center;">Zeng et al.</td>
+<td style="text-align: center;">2020</td>
+<td style="text-align: center;">Pybullet</td>
+<td style="text-align: center;">throwing objects</td>
+</tr>
+</tbody>
+</table>
 </section>
-<section id="general_objective" class="slide level2">
-<h2>General objective</h2>
-<p>The general objective of this thesis project is:</p>
-<ul>
-<li>Train a robotic agent in simulation to solve a specific dexterous manipulation task using DNN model trained with reinforcement learning algorithms and domain randomization techniques.</li>
-</ul>
+<section id="sota-simulators" class="slide level2">
+<h2>SOTA simulators</h2>
+<table>
+<colgroup>
+<col style="width: 14%" />
+<col style="width: 12%" />
+<col style="width: 20%" />
+<col style="width: 12%" />
+<col style="width: 12%" />
+<col style="width: 12%" />
+<col style="width: 14%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Simulator</th>
+<th style="text-align: center;">Physics</th>
+<th style="text-align: center;">Photorealistic</th>
+<th style="text-align: center;">DR</th>
+<th style="text-align: center;">ROS</th>
+<th style="text-align: center;">GPU</th>
+<th style="text-align: center;">Multi-GPU</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Gazebo</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">❌</td>
+<td style="text-align: center;">❌</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">❌</td>
+</tr>
+<tr class="even">
+<td>Pybullet</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">❌</td>
+<td style="text-align: center;">❌</td>
+<td style="text-align: center;">❌</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">❌</td>
+</tr>
+<tr class="odd">
+<td>MuJoCo</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">❌</td>
+<td style="text-align: center;">❌</td>
+<td style="text-align: center;">❌</td>
+<td style="text-align: center;">❌</td>
+<td style="text-align: center;">❌</td>
+</tr>
+<tr class="even">
+<td>Unity</td>
+<td style="text-align: center;">❌</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">❌</td>
+<td style="text-align: center;">❌</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">❌</td>
+</tr>
+<tr class="odd">
+<td>Isaac Sim</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">✅</td>
+</tr>
+</tbody>
+</table>
 </section>
-<section id="specific_objectives" class="slide level2">
-<h2>Specific objectives</h2>
-<p>In order to achieve the main objective, the following specific objectives are considered:</p>
-<ol type="1">
-<li><p>Train a DDN-based model with the PPO <span class="citation" data-cites="schulman2017">(Schulman et al. 2017)</span> algorithm in a <strong>virtual environment</strong> with domain randomization, using a full-state observation.</p></li>
-<li><p>Same as above, but this time using a partial observation of the environment (RGB images).</p></li>
-</ol>
+<section id="simulator-gap" class="slide level2">
+<h2>Simulator Gap</h2>
+<p><img data-src="images/simulation_gap.png" style="width:80.0%" /></p>
 </section></section>
 <section>
-<section id="simulator" class="title-slide slide level1">
-<h1>Simulator</h1>
+<section id="isaac" class="title-slide slide level1">
+<h1>Isaac Sim</h1>
 
 </section>
 <section id="nvidia-isaac-sim" class="slide level2">
 <h2>NVIDIA Isaac Sim</h2>
 <p>The Isaac Sim is powered by the NVIDIA Omniverse, a platform for real-time simulation and 3D production pipelines with support for multi-GPU.</p>
-<p><strong>Specs</strong>:</p>
-<ul>
-<li>Navigation and manipulation applications</li>
-<li>Support for Isaac SDK and ROS</li>
-<li>RGB-D, Lidar and IMU sensors</li>
-<li>Domain Randomization</li>
-<li>Ground truth labeling, segmentation, and bounding boxes</li>
-</ul>
-</section>
-<section id="examples-isaac-sim" class="slide level2">
-<h2>Examples: Isaac Sim</h2>
 <table>
+<thead>
+<tr>
+<th>
+Specs
+</th>
+<th>
+Example
+</th>
+</tr>
+</thead>
 <tbody>
 <tr>
 <td>
 <div>
-<p>
-Robotic manipulation
-</p>
-<video data-autoplay src="videos/isaac_main_fill_bin.m4v" loop="loop" width="440" height="247">
-</video>
+<ul>
+<li>
+Navigation and manipulation tasks
+</li>
+<li>
+Support for Isaac SDK and ROS
+</li>
+<li>
+RGB-D, Lidar and IMU sensor
+</li>
+<li>
+Domain Randomization
+</li>
+<li>
+Ground truth labeling
+</li>
+<li>
+Segmentation and BBs
+</li>
+</ul>
 </div>
 </td>
 <td>
 <div>
-<p>
-Domain Randomization
-</p>
-<video data-autoplay src="videos/isaac_dr.m4v" loop="loop" width="440" height="247">
+<video data-autoplay src="videos/isaac_main_fill_bin.m4v" loop="loop" width="440" height="247">
 </video>
 </div>
 </td>
@@ -546,14 +689,61 @@ Domain Randomization
 </tbody>
 </table>
 </section>
-<section id="how-it-works" class="slide level2">
-<h2>How it Works</h2>
-<p>Omniverse consists of 5 key components: Connect, Nucleus, Kit, Simulation and RTX. These components are distributed in a microservices architecture.</p>
-<p><img data-src="images/OV_marketecture.png" alt="Omniverse components" /></p>
+<section id="main-features-13-simulate-reality" class="slide level2">
+<h2>Main features (1/3): Simulate Reality</h2>
+<p>Omniverse physics currently includes Rigid Body Dynamics, Destruction and Fracture, Vehicle Dynamics and Fluid Dynamics (Flow)</p>
+<center>
+<video data-autoplay src="videos/physix_demo.m4v" loop="loop" width="720" height="405">
+</video>
+</center>
 </section>
-<section id="omniverse-pipeline" class="slide level2">
-<h2>Omniverse pipeline</h2>
+<section id="main-features-23-rtx-renderer" class="slide level2">
+<h2>Main features (2/3): RTX Renderer</h2>
+<p>Omniverse supports RTX Renderer that fully exploits hardware RT (Turing &amp; Ampere) to do real-time hardware-accelerated <strong>ray-tracing</strong> and <strong>path-tracing</strong></p>
+<center>
+<video data-autoplay src="videos/rtx_demo.m4v" loop="loop" width="720" height="405">
+</video>
+</center>
+</section>
+<section id="main-features-33-domain-randomization" class="slide level2">
+<h2>Main features (3/3): Domain Randomization</h2>
+<p>DR varies the parameters that define a scene in the simulation env. Some parameters include pose, scale, the lighting in simulation, the appearance of objects (color and textures)</p>
+<!-- One of the main objectives of domain randomization is to enhance the training of deep learning applications by exposing the neural network to a wide variety of domain parameters in simulation which will help to generalize well to real world applications.  -->
+<center>
+<video data-autoplay src="videos/dr_demo.m4v" loop="loop" width="720" height="405">
+</video>
+</center>
+</section>
+<section id="how-it-works" class="slide level2">
+<h2>How it works</h2>
 <p><img data-src="images/omni_pipeline.png" alt="Omniverse pipeline" /></p>
+</section></section>
+<section>
+<section id="project_review" class="title-slide slide level1">
+<h1>Project review</h1>
+
+</section>
+<section id="hypothesis" class="slide level2">
+<h2>Hypothesis</h2>
+<blockquote>
+<p>If we train a Deep RL agent in a state-of-the-art simulator where the simulation parameters are varied, then it’s possible to learn a robust policy to solve a specific dexterous manipulation task.</p>
+</blockquote>
+</section>
+<section id="general-objective" class="slide level2">
+<h2>General objective</h2>
+<p>The general objective of this thesis project is:</p>
+<ul>
+<li>Train a Deep RL Agent in simulation to solve a specific manipulation task using a modern model-free RL algorithm and domain randomization techniques.</li>
+</ul>
+</section>
+<section id="specific-objectives" class="slide level2">
+<h2>Specific objectives</h2>
+<p>In order to achieve the main objective, the following specific objectives are considered:</p>
+<ol type="1">
+<li><p>Train a DDN-based model with the PPO <span class="citation" data-cites="schulman2017">(Schulman et al. 2017)</span> algorithm in a <strong>virtual environment</strong> with domain randomization, using a full-state observation.</p></li>
+<li><p>Same as above, but this time using a partial observation of the environment (RGB images).</p></li>
+<li><p>Evaluate different strategies and determine the best methods.</p></li>
+</ol>
 </section></section>
 <section>
 <section id="case_study" class="title-slide slide level1">
@@ -592,7 +782,7 @@ R = \dot{x} e^{\frac{-x^{2}}{\sigma^{2}}}
 <section id="model" class="slide level2">
 <h2>Model</h2>
 <!-- The input of the model is an image of $224 \times 224$ RGB image scaled to $[0,1]$. -->
-<!-- This images are generated by the camera in simulation after $n$ steps. -->
+<!-- These images are generated by the camera in simulation after $n$ steps. -->
 <!-- During each step, the physics engine process the physical contacts and the RTX component render the images. -->
 <p><img data-src="images/jetracer_model_arch.png" /></p>
 </section>
@@ -646,13 +836,40 @@ R = \dot{x} e^{\frac{-x^{2}}{\sigma^{2}}}
 </tbody>
 </table>
 </section>
+<section id="task-details" class="slide level2">
+<h2>Task details</h2>
+<p><img data-src="images/task_description.png" /></p>
+</section>
+<section id="domain-randomization-in-the-task" class="slide level2">
+<h2>Domain randomization in the task</h2>
+<table>
+<thead>
+<tr class="header">
+<th>Position</th>
+<th>Scale</th>
+<th>Color</th>
+<th>Light</th>
+<th>Texture</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><img data-src="images/dr/isaac_dr_4_mov_comp_sample.gif" /></td>
+<td><img data-src="images/dr/isaac_dr_8_scale_comp_sample.gif" /></td>
+<td><img data-src="images/dr/isaac_dr_2_color_comp_sample.gif" /></td>
+<td><img data-src="images/dr/isaac_dr_10_light_comp_sample.gif" /></td>
+<td><img data-src="images/dr/isaac_dr_12_texture_comp_sample.gif" /></td>
+</tr>
+</tbody>
+</table>
+</section>
 <section id="proposal_sol" class="slide level2">
 <h2>Proposal solution</h2>
-<p>In order to solve the task using the same framework and tools. The following are proposed:</p>
 <ol type="1">
 <li><p>Train the agent using a <strong>full-satate observation</strong>, using all available information (position, velocity) as input for a less complex network architecture, but using the same training method (PPO).</p></li>
 <li><p>Train the agent using <strong>partial-state observation</strong>, that is the image of one or two cameras in the environment, using a similar architecture to the Jetracer example and PPO.</p></li>
 </ol>
+<p><img data-src="images/proposal_sols.svg" /></p>
 </section>
 <section id="current_status" class="slide level2">
 <h2>Current status</h2>
@@ -666,17 +883,50 @@ R = \dot{x} e^{\frac{-x^{2}}{\sigma^{2}}}
 <section id="section" class="slide level2">
 <h2></h2>
 <div id="refs" class="references csl-bib-body hanging-indent" style="width: 1000px; height: 600px; overflow-y: scroll;" role="doc-bibliography">
+<div id="ref-balaji2019" class="csl-entry" role="doc-biblioentry">
+Balaji, Bharathan, Sunil Mallya, Sahika Genc, Saurabh Gupta, Leo Dirac, Vineet Khare, Gourav Roy, et al. 2019. <span>“<span>DeepRacer</span>: <span>Educational Autonomous Racing Platform</span> for <span>Experimentation</span> with <span>Sim2Real Reinforcement Learning</span>.”</span> <em>arXiv:1911.01562 [Cs]</em>, November. <a href="http://arxiv.org/abs/1911.01562">http://arxiv.org/abs/1911.01562</a>.
+</div>
 <div id="ref-brockman2016" class="csl-entry" role="doc-biblioentry">
 Brockman, Greg, Vicki Cheung, Ludwig Pettersson, Jonas Schneider, John Schulman, Jie Tang, and Wojciech Zaremba. 2016. <span>“<span>OpenAI Gym</span>.”</span> <em>arXiv:1606.01540 [Cs]</em>, June. <a href="http://arxiv.org/abs/1606.01540">http://arxiv.org/abs/1606.01540</a>.
+</div>
+<div id="ref-gomes2021" class="csl-entry" role="doc-biblioentry">
+Gomes, Daniel Fernandes, Paolo Paoletti, and Shan Luo. 2021. <span>“Generation of <span>GelSight Tactile Images</span> for <span>Sim2Real Learning</span>.”</span> <em>arXiv:2101.07169 [Cs]</em>, January. <a href="http://arxiv.org/abs/2101.07169">http://arxiv.org/abs/2101.07169</a>.
+</div>
+<div id="ref-kaspar2020" class="csl-entry" role="doc-biblioentry">
+Kaspar, Manuel, Juan David Munoz Osorio, and Jürgen Bock. 2020. <span>“<span>Sim2Real Transfer</span> for <span>Reinforcement Learning</span> Without <span>Dynamics Randomization</span>.”</span> <em>arXiv:2002.11635 [Cs]</em>, February. <a href="http://arxiv.org/abs/2002.11635">http://arxiv.org/abs/2002.11635</a>.
 </div>
 <div id="ref-mnih2016" class="csl-entry" role="doc-biblioentry">
 Mnih, Volodymyr, Adrià Puigdomènech Badia, Mehdi Mirza, Alex Graves, Timothy P. Lillicrap, Tim Harley, David Silver, and Koray Kavukcuoglu. 2016. <span>“Asynchronous <span>Methods</span> for <span>Deep Reinforcement Learning</span>.”</span> <em>arXiv:1602.01783 [Cs]</em>, June. <a href="http://arxiv.org/abs/1602.01783">http://arxiv.org/abs/1602.01783</a>.
 </div>
+<div id="ref-nachum2019" class="csl-entry" role="doc-biblioentry">
+Nachum, Ofir, Michael Ahn, Hugo Ponte, Shixiang Gu, and Vikash Kumar. 2019. <span>“Multi-<span>Agent Manipulation</span> via <span>Locomotion</span> Using <span>Hierarchical Sim2Real</span>.”</span> <em>arXiv:1908.05224 [Cs]</em>, October. <a href="http://arxiv.org/abs/1908.05224">http://arxiv.org/abs/1908.05224</a>.
+</div>
+<div id="ref-openai2019" class="csl-entry" role="doc-biblioentry">
+OpenAI, Ilge Akkaya, Marcin Andrychowicz, Maciek Chociej, Mateusz Litwin, Bob McGrew, Arthur Petron, et al. 2019. <span>“Solving <span>Rubik</span>’s <span>Cube</span> with a <span>Robot Hand</span>.”</span> <em>arXiv:1910.07113 [Cs, Stat]</em>, October. <a href="http://arxiv.org/abs/1910.07113">http://arxiv.org/abs/1910.07113</a>.
+</div>
 <div id="ref-stable-baselines3" class="csl-entry" role="doc-biblioentry">
 Raffin, Antonin, Ashley Hill, Maximilian Ernestus, Adam Gleave, Anssi Kanervisto, and Noah Dormann. 2019. <span>“Stable Baselines3.”</span> <em>GitHub Repository</em>. <a href="https://github.com/DLR-RM/stable-baselines3">https://github.com/DLR-RM/stable-baselines3</a>; GitHub.
 </div>
+<div id="ref-raghavan2020" class="csl-entry" role="doc-biblioentry">
+Raghavan, Nithin, Punarjay Chakravarty, and Shubham Shrivastava. 2020. <span>“<span>Sim2Real</span> for <span>Self</span>-<span>Supervised Monocular Depth</span> and <span>Segmentation</span>.”</span> <em>arXiv:2012.00238 [Cs]</em>, November. <a href="http://arxiv.org/abs/2012.00238">http://arxiv.org/abs/2012.00238</a>.
+</div>
+<div id="ref-rizzardo2020" class="csl-entry" role="doc-biblioentry">
+Rizzardo, Carlo, Sunny Katyara, Miguel Fernandes, and Fei Chen. 2020. <span>“The <span>Importance</span> and the <span>Limitations</span> of <span>Sim2Real</span> for <span>Robotic Manipulation</span> in <span>Precision Agriculture</span>.”</span> <em>arXiv:2008.03983 [Cs]</em>, August. <a href="http://arxiv.org/abs/2008.03983">http://arxiv.org/abs/2008.03983</a>.
+</div>
 <div id="ref-schulman2017" class="csl-entry" role="doc-biblioentry">
 Schulman, John, Filip Wolski, Prafulla Dhariwal, Alec Radford, and Oleg Klimov. 2017. <span>“Proximal <span>Policy Optimization Algorithms</span>.”</span> <em>arXiv:1707.06347 [Cs]</em>, August. <a href="http://arxiv.org/abs/1707.06347">http://arxiv.org/abs/1707.06347</a>.
+</div>
+<div id="ref-tan2018" class="csl-entry" role="doc-biblioentry">
+Tan, Jie, Tingnan Zhang, Erwin Coumans, Atil Iscen, Yunfei Bai, Danijar Hafner, Steven Bohez, and Vincent Vanhoucke. 2018. <span>“Sim-to-<span>Real</span>: <span>Learning Agile Locomotion For Quadruped Robots</span>.”</span> <em>arXiv:1804.10332 [Cs]</em>, May. <a href="http://arxiv.org/abs/1804.10332">http://arxiv.org/abs/1804.10332</a>.
+</div>
+<div id="ref-yan2018" class="csl-entry" role="doc-biblioentry">
+Yan, Xinchen, Jasmine Hsu, Mohi Khansari, Yunfei Bai, Arkanath Pathak, Abhinav Gupta, James Davidson, and Honglak Lee. 2018. <span>“Learning 6-<span>DOF Grasping Interaction</span> via <span>Deep Geometry</span>-Aware <span>3d Representations</span>.”</span> <em>arXiv:1708.07303 [Cs]</em>, June. <a href="http://arxiv.org/abs/1708.07303">http://arxiv.org/abs/1708.07303</a>.
+</div>
+<div id="ref-zeng2020" class="csl-entry" role="doc-biblioentry">
+Zeng, Andy, Shuran Song, Johnny Lee, Alberto Rodriguez, and Thomas Funkhouser. 2020. <span>“<span>TossingBot</span>: <span>Learning</span> to <span>Throw Arbitrary Objects</span> with <span>Residual Physics</span>.”</span> <em>arXiv:1903.11239 [Cs, Stat]</em>, May. <a href="http://arxiv.org/abs/1903.11239">http://arxiv.org/abs/1903.11239</a>.
+</div>
+<div id="ref-zhang2019" class="csl-entry" role="doc-biblioentry">
+Zhang, Qi, Tao Du, and Changzheng Tian. 2019. <span>“A <span>Sim2real</span> Method Based on <span>DDQN</span> for Training a Self-Driving Scale Car.”</span> <em>Mathematical Foundations of Computing</em> 2 (4): 315. <a href="https://doi.org/10.3934/mfc.2019020">https://doi.org/10.3934/mfc.2019020</a>.
 </div>
 </div>
 </section>
